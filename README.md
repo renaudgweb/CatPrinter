@@ -1,6 +1,6 @@
 # CatPrinter
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
-
+##
 pip install -r requirements.txt
 
 apt install wkhtmltopdf
