@@ -1,3 +1,5 @@
+![image text](catprinter.jpg "Thermal Cat printer")
+
 # CatPrinter
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
 
