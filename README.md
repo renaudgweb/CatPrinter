@@ -17,7 +17,7 @@ python3 -tt print_server.py
 ## HTML TO IMAGE:
 wkhtmltoimage --width 384 https://mastodon.social/explore /home/your/path/catprinter/test.png
 
-wkhtmltoimage --width 384 --height 500 https://renaudgajda.com/ /home/your/path/catprinter/test.png
+wkhtmltoimage --width 384 --height 500 https://mastodon.social/explore /home/your/path/catprinter/test.png
 
 
 
