@@ -16,11 +16,14 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo to print the actual weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
+    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo LFPO to print the actual weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
 
 def meteo(update, context):
     """Send a message and print the weather when the command /meteo is issued."""
     update.message.reply_text('I print the weather 😺️')
+    meteo = update.message.text
+    meteo = meteo.replace("/meteo ", "")
+    os.system("weather " + meteo + " -m -v > /your/path/Documents/catprinter/app/meteo+/meteo.txt")
     os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
 
 def job(update, context):
