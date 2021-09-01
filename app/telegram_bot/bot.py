@@ -16,7 +16,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo to print the actual weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
+    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo to print the actual weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
 
 def meteo(update, context):
     """Send a message and print the weather when the command /meteo is issued."""
@@ -75,6 +75,21 @@ def number(update, context):
 	
 	os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
 
+def geo(update, context):
+	"""Return and print the adresse of coordonates when the command /geo is issued."""
+	update.message.reply_text('I print the adresse right away 😺️')
+	geo = update.message.text
+	geo = geo.replace("/geo ", "")
+	lat = geo.replace("lat:", "")
+	lat = lat[0:8]
+	lon = geo.replace("lon:", "")
+	lon = lon[13:20]
+	
+	r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+	response = r.json()
+	location = response['display_name']
+	
+	os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -97,6 +112,7 @@ def main():
     dp.add_handler(CommandHandler("job", job))
     dp.add_handler(CommandHandler("iss", iss))
     dp.add_handler(CommandHandler("number", number))
+    dp.add_handler(CommandHandler("geo", geo))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, echo_text))
