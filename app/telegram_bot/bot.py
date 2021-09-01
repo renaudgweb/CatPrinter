@@ -1,4 +1,5 @@
 import logging
+import requests
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -15,7 +16,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo to print actual weather.\n- Send /job to get jobs of the day.\n- Send URL to print web page.\nI take care of the printing 😽️')
+    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo to print the actual weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
 
 def meteo(update, context):
     """Send a message and print the weather when the command /meteo is issued."""
@@ -30,7 +31,7 @@ def job(update, context):
 def echo_text(update, context):
     """Echo and print the user message."""
     update.message.reply_text("I print what you wrote 😺️")
-    os.system("curl --location -X POST --form 'text=\"" + update.message.text + "\"' --form 'feed=\"100\"' 'localhost:5000'")
+    os.system("curl --location -X POST --form 'text=\"" + update.message.text + "\"' --form 'font=\"VG5000-Regular_web.ttf\"' --form 'size=\"26\"' --form 'feed=\"100\"' 'localhost:5000'")
 
 def echo_image(update, context):
     """Print the user image."""
@@ -47,6 +48,33 @@ def regex(update, context):
     update.message.reply_text('I print this page right away 😺️')
     os.system("wkhtmltoimage --width 384 " + update.message.text + " /home/your/path/catprinter/app/web_print/test.png")
     os.system("curl --location -X POST --form 'image=@/home/your/path/catprinter/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
+
+def iss(update, context):
+	"""Return and print the astronauts name when the command /iss is issued."""
+	update.message.reply_text('I print astronaut names right away 😺️')
+	r = requests.get("http://api.open-notify.org/astros.json")
+	astros = r.json()
+	people = astros['people']
+
+	people_in_space = []
+	for d in people:
+		people_in_space.append(d['name'])
+
+	iss_info =  f"Il y a {astros['number']} astronautes en orbite: {', '.join(people_in_space)}."
+	os.system("curl --location -X POST --form 'text=\"" + iss_info + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
+
+def number(update, context):
+	"""Return and print the number info when the command /number is issued."""
+	update.message.reply_text('I print number informations right away 😺️')
+	number = update.message.text
+	number = number.replace("/number ", "")
+
+	r = requests.get('http://numbersapi.com/'+number+'/trivia?json')
+	response = r.json()
+	number_res = response['text']
+	
+	os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -67,6 +95,8 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("meteo", meteo))
     dp.add_handler(CommandHandler("job", job))
+    dp.add_handler(CommandHandler("iss", iss))
+    dp.add_handler(CommandHandler("number", number))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, echo_text))
