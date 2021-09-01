@@ -61,7 +61,7 @@ def iss(update, context):
 		people_in_space.append(d['name'])
 
 	iss_info =  f"Il y a {astros['number']} astronautes en orbite: {', '.join(people_in_space)}."
-	os.system("curl --location -X POST --form 'text=\"" + iss_info + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
+	os.system("curl --location -X POST --form 'text=\"" + iss_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
 
 def number(update, context):
 	"""Return and print the number info when the command /number is issued."""
@@ -73,7 +73,7 @@ def number(update, context):
 	response = r.json()
 	number_res = response['text']
 	
-	os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
+	os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
 
 def geo(update, context):
 	"""Return and print the adresse of coordonates when the command /geo is issued."""
