@@ -89,7 +89,7 @@ def geo(update, context):
 	response = r.json()
 	location = response['display_name']
 	
-	os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"20\"' --form 'feed=\"100\"' 'localhost:5000'")
+	os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
 
 def error(update, context):
     """Log Errors caused by Updates."""
