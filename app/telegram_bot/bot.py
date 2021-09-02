@@ -23,7 +23,7 @@ def meteo(update, context):
     update.message.reply_text('I print the weather 😺️')
     meteo = update.message.text
     meteo = meteo.replace("/meteo ", "")
-    os.system("weather " + meteo + " -q -m -v > /your/path/Documents/catprinter/app/meteo+/meteo.txt")
+    os.system("weather " + meteo + " -qmv > /your/path/Documents/catprinter/app/meteo+/meteo.txt")
     os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
 
 def job(update, context):
