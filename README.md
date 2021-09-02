@@ -4,6 +4,7 @@
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
 ---
 > pip install -r requirements.txt
+
 > apt install wkhtmltopdf
 
 Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
