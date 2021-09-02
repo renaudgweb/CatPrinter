@@ -18,6 +18,11 @@ def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo LFPO to print weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
 
+def feed(update, context):
+    """roll out some paper of the printer when /feed is issued."""
+    update.message.reply_text("I roll out some paper 😺️")
+    os.system("curl --location -X POST --form 'feed=\"100\"' 'localhost:5000'")
+
 def meteo(update, context):
     """Send a message and print the weather when the command /meteo is issued."""
     update.message.reply_text('I print the weather 😺️')
@@ -111,6 +116,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("feed", feed))
     dp.add_handler(CommandHandler("meteo", meteo))
     dp.add_handler(CommandHandler("job", job))
     dp.add_handler(CommandHandler("iss", iss))
