@@ -4,23 +4,25 @@
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
 ---
 > pip install -r requirements.txt
-
 > apt install wkhtmltopdf
+Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
 ---
-## START SCRIPT:
-> python3 -tt print_server.py
+## Start printer driver & server:
+> cd /home/your/path/to/this/folder && python3 -tt print_server.py
+## Start Bot Script:
+> cd /home/your/path/to/app/telegram_bot && python3 bot.py
 
-## HTML TO IMAGE:
-> wkhtmltoimage --width 384 https://mastodon.social/explore /home/your/path/catprinter/test.png
-> wkhtmltoimage --width 384 --height 500 https://mastodon.social/explore /home/your/path/catprinter/test.png
+## HTML to image:
+> wkhtmltoimage --width 384 https://example.com /home/your/path/catprinter/test.png
+> wkhtmltoimage --width 384 --height 500 https://example.com /home/your/path/catprinter/test.png
 
-## SEND IMAGE:
+## Send image:
 > curl --location -X POST --form 'image=@/home/your/path/catprinter/test.png' --form 'feed="100"' 'localhost:5000'
 
-## SEND TEXT:
+## Send text:
 > curl --location -X POST --form 'text="Lorem ipsum."' --form 'feed="100"' 'localhost:5000'
 
-## FEED PAPIER:
+## Feed paper:
 > curl --location --request POST --form 'feed="100"' 'localhost:5000'
 ---
 ### Credits
