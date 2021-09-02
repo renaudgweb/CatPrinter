@@ -3,14 +3,11 @@
 # CatPrinter
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
 
-##
-pip install -r requirements.txt
+---
+> pip install -r requirements.txt
 
-apt install wkhtmltopdf
-
-
-
-
+> apt install wkhtmltopdf
+---
 
 ## START SCRIPT:
 python3 -tt print_server.py
@@ -36,3 +33,9 @@ curl --location -X POST --form 'text="Lorem ipsum."' --form 'feed="100"' 'localh
 
 ## FEED PAPIER:
 curl --location --request POST --form 'feed="100"' 'localhost:5000'
+
+---
+
+### Credits
+[amber-sixel gb01print](https://github.com/amber-sixel/gb01print)
+[xssfox print_server](https://gist.github.com/xssfox/b911e0781a763d258d21262c5fdd2dec)
