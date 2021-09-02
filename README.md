@@ -25,4 +25,5 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 ---
 ### Credits
 [amber-sixel gb01print](https://github.com/amber-sixel/gb01print)
+
 [xssfox print_server](https://gist.github.com/xssfox/b911e0781a763d258d21262c5fdd2dec)
