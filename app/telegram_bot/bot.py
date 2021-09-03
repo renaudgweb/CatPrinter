@@ -72,7 +72,7 @@ def meteo(update, context):
 	os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@2x.png')
 	os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@2x.png /home/your/path/catprinter/app/meteo+/icon.png')
 	os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
-	os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' 'localhost:5000'")
+	os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' --form 'feed="100"' 'localhost:5000'")
 
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
