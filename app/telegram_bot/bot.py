@@ -16,7 +16,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send /meteo LFPO to print weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\n- Send an URL to print the web page.\nI take care of the printing 😽️')
+    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send an URL to print the web page.\n- Send /meteo LFPO to print weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo 45.12345 04.12345 to print the adresse.\nI take care of the printing 😽️')
 
 def feed(update, context):
     """roll out some paper of the printer when /feed is issued."""
@@ -92,10 +92,8 @@ def geo(update, context):
 	update.message.reply_text('I print the adresse right away 😺️')
 	geo = update.message.text
 	geo = geo.replace("/geo ", "")
-	lat = geo.replace("lat:", "")
 	lat = lat[0:8]
-	lon = geo.replace("lon:", "")
-	lon = lon[13:20]
+	lon = lon[9:21]
 	
 	r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
 	response = r.json()
