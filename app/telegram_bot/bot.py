@@ -135,8 +135,8 @@ def geo(update, context):
     update.message.reply_text('I print the adresse right away 😺️')
     geo = update.message.text
     geo = geo.replace("/geo ", "")
-    lat = lat[0:8]
-    lon = lon[9:21]
+    lat = geo[0:8]
+    lon = geo[9:21]
 	
     r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
     response = r.json()
