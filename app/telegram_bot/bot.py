@@ -1,6 +1,7 @@
 import logging
 import requests
 import os
+from datetime import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -16,20 +17,62 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send an URL to print the web page.\n- Send /meteo LFPO to print weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo 45.12345 04.12345 to print the adresse.\nI take care of the printing 😽️')
+    update.message.reply_text('You can:\n- write me a message.\n- Send me a picture.\n- Send an URL to print the web page.\n- Send /meteo city to print weather\n- Send /weather ICAO to print weather.\n- Send /job to print the jobs of the day.\n- Send /iss to print peoples in space.\n- Send /number 1234 to print informations about it.\n- Send /geo lat:45.12345 lon:4.12345 to print the adresse.\nI take care of the printing 😽️')
 
 def feed(update, context):
     """roll out some paper of the printer when /feed is issued."""
     update.message.reply_text("I roll out some paper 😺️")
     os.system("curl --location -X POST --form 'feed=\"100\"' 'localhost:5000'")
 
+def weather(update, context):
+    """Print the airport weather when the command /weather is issued."""
+    update.message.reply_text('I print the airport weather 😺️')
+    weather = update.message.text
+    weather = weather.replace("/weather ", "")
+    os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > /your/path/Documents/catprinter/app/meteo+/weather.txt")
+    os.system("cd /home/your/path/catprinter/app/meteo+ && ./weather.sh")
+
 def meteo(update, context):
-    """Send a message and print the weather when the command /meteo is issued."""
-    update.message.reply_text('I print the weather 😺️')
-    meteo = update.message.text
-    meteo = meteo.replace("/meteo ", "")
-    os.system("weather " + meteo + " -qmv | sed 's/\;/\,/g' > /your/path/Documents/catprinter/app/meteo+/meteo.txt")
-    os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
+	"""Send a message and print the city weather when the command /meteo is issued."""
+	update.message.reply_text('I print the city weather 😺️')
+	city_name = update.message.text
+        city_name = city_name.replace("/meteo ", "")
+        r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
+	response = r.json()
+
+	desc = response['weather'][0]['description']
+	icon = response['weather'][0]['icon']
+	temp = response['main']['temp']
+	temp_feels = response['main']['feels_like']
+	temp_min = response['main']['temp_min']
+	temp_max = response['main']['temp_max']
+	pres = response['main']['pressure']
+	hum = response['main']['humidity']
+	vis = response['visibility']
+	wind_speed = response['wind']['speed']
+	wind_dir = response['wind']['deg']
+	clouds = response['clouds']['all']
+
+	dt = response['dt']
+	dt = datetime.fromtimestamp(dt)
+	date = dt.strftime("%a %d %b %Y, %H:%M:%S")
+	sunrise = response['sys']['sunrise']
+	sunrise = datetime.fromtimestamp(sunrise)
+	sunrise_date = sunrise.strftime("%H:%M")
+	sunset = response['sys']['sunset']
+	sunset = datetime.fromtimestamp(sunset)
+	sunset_date = sunset.strftime("%H:%M")
+
+	city = response['name']
+
+	f = open("/home/your/path/catprinter/app/meteo+/meteo.txt", "w")
+	f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
+	f.close()
+
+	os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@2x.png')
+	os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@2x.png /home/your/path/catprinter/app/meteo+/icon.png')
+	os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
+	os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' 'localhost:5000'")
 
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
@@ -43,7 +86,7 @@ def echo_text(update, context):
     msg = update.message.text
     f.write(msg.replace(";", ","))
     f.close()
-    os.system("cd /home/your/path/catprinter/app/message && /.message.sh")
+    os.system("cd /home/your/path/catprinter/app/message && ./message.sh")
 
 def echo_image(update, context):
     """Print the user image."""
@@ -119,6 +162,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("feed", feed))
+    dp.add_handler(CommandHandler("weather", weather))
     dp.add_handler(CommandHandler("meteo", meteo))
     dp.add_handler(CommandHandler("job", job))
     dp.add_handler(CommandHandler("iss", iss))
