@@ -156,7 +156,7 @@ def geo(update, context):
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-    update.message.reply_text('meow? /help')
+    update.message.reply_text('meow? 😼️ /help')
 
 def main():
     """Start the bot."""
