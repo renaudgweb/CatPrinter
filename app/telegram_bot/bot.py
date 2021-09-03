@@ -39,7 +39,11 @@ def job(update, context):
 def echo_text(update, context):
     """Echo and print the user message."""
     update.message.reply_text("I print what you wrote 😺️")
-    os.system("curl --location -X POST --form 'text=\"" + update.message.text + "\"' --form 'font=\"VG5000-Regular_web.ttf\"' --form 'size=\"26\"' --form 'feed=\"100\"' 'localhost:5000'")
+    f = open("/home/your/path/catprinter/app/message/message.txt", "w")
+    msg = update.message.text
+    f.write(msg.replace(";", ","))
+    f.close()
+    os.system("cd /home/your/path/catprinter/app/message && /.message.sh")
 
 def echo_image(update, context):
     """Print the user image."""
