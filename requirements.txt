@@ -2,3 +2,4 @@ python-telegram-bot
 bleak
 requests
 beautifulsoup4
+qrcode
