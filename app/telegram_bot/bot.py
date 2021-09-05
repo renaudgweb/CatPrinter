@@ -4,6 +4,11 @@ import os
 from datetime import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
+import qrcode
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.moduledrawers import CircleModuleDrawer
+from qrcode.image.styles.colormasks import SquareGradiantColorMask
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -17,7 +22,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('- write me a message.\n- Send me a picture.\n- Send me an URL to print web page.\n- Send /meteo city to get weather.\n- Send /weather ICAO to get METAR weather.\n- Send /job to get jobs of the day.\n- Send /iss to know peoples in space.\n- Send /number 1234 to get some info about it.\n- Send /geo 45.12345 04.12345 to get adresse.\n\nI take care of the printing 😽️')
+    update.message.reply_text('- write me a message.\n- Send me a picture.\n- Send me an URL to print web page.\n- Send /qr <text> to get & print QRCode\n- Send /meteo <city> # to get weather.\n- Send /weather <ICAO> # to get METAR weather.\n- Send /job # to get jobs of the day.\n- Send /iss # to know peoples in space.\n- Send /number <1234> # to get some info about it.\n- Send /geo <45.12345 04.12345> # to get adresse.\n\nI take care of the printing 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -154,6 +159,30 @@ def geo(update, context):
     os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('Meow! 😻️ /help')
 
+def qr(update, context):
+    """Return and print the QR Code when the command /qr is issued."""
+    update.message.reply_text('I print the QR Code right away... 😺️')
+    code = update.message.text
+    code = code.replace("/qr ", "")
+    qr = qrcode.QRCode(
+        version=4,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(code)
+
+    img_1 = qr.make_image(back_color=(255, 195, 235), fill_color=(55, 95, 35), image_factory=StyledPilImage, module_drawer=CircleModuleDrawer(), color_mask=SquareGradiantColorMask())
+    img_2 = qr.make_image(image_factory=StyledPilImage)
+    type(img_1)
+    type(img_2)
+    img_1.save("/home/your/path/catprinter/app/telegram_bot/qrcode1.png")
+    img_2.save("/home/your/path/catprinter/app/telegram_bot/qrcode.png")
+    os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/telegram_bot/qrcode.png\"' 'localhost:5000'")
+    os.system("curl --location -X POST --form 'text=\"" + code + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+    update.message.reply_photo(open("/home/your/path/catprinter/app/telegram_bot/qrcode1.png", "rb"))
+    update.message.reply_text('Meow! 😻️ /help')
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -179,6 +208,7 @@ def main():
     dp.add_handler(CommandHandler("iss", iss))
     dp.add_handler(CommandHandler("number", number))
     dp.add_handler(CommandHandler("geo", geo))
+    dp.add_handler(CommandHandler("qr", qr))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, text))
