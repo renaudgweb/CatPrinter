@@ -128,7 +128,7 @@ def iss(update, context):
         people_in_space.append(d['name']+" (")
 	people_in_space.append(d['craft']+")\n")
 
-    iss_info =  f"there are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
+    iss_info =  f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
     os.system("curl --location -X POST --form 'text=\"" + iss_info[:-1] + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('Meow! 😻️ /help')
 
