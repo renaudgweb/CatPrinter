@@ -125,10 +125,11 @@ def iss(update, context):
 
     people_in_space = []
     for d in people:
-        people_in_space.append(d['name'])
+        people_in_space.append(d['name']+" (")
+	people_in_space.append(d['craft']+")\n")
 
-    iss_info =  f"Il y a {astros['number']} astronautes en orbite: {', '.join(people_in_space)}."
-    os.system("curl --location -X POST --form 'text=\"" + iss_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+    iss_info =  f"Il y a {astros['number']} astronautes en orbite:\n{''.join(people_in_space)}."
+    os.system("curl --location -X POST --form 'text=\"" + iss_info[:-1] + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('Meow! 😻️ /help')
 
 def number(update, context):
