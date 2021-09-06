@@ -423,7 +423,7 @@ def http_server_upload():
             "transmit": transmit,
             "ready": ready,
             "address": device.address,
-            "status" : status
+            "status": status
         })
 
 
