@@ -31,7 +31,7 @@ import PIL.ImageFont
 import PIL.ImageChops
 import re
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import threading
 
 app = Flask(__name__)
@@ -418,13 +418,13 @@ def http_server_upload():
         image_queue.append(drawTestPattern(None, feed)) # just feed
 
         return "Sent to printer queue\n"
-    else:
-        return {
+    if request.method == 'GET':
+        return jsonify({
             "transmit": transmit,
             "ready": ready,
             "address": device.address,
             "status" : status
-        }
+        })
 
 
 threading.Thread(target=app.run).start()
