@@ -22,7 +22,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('- write me a message.\n- Send me a picture.\n- Send me an URL to print web page.\n- Send /qr <text> # to get & print QRCode\n- Send /meteo <city> # to get weather.\n- Send /weather <ICAO> # to get METAR weather.\n- Send /job # to get jobs of the day.\n- Send /iss # to know peoples in space.\n- Send /number <1234> # to get some info about it.\n- Send /geo <45.12345 04.12345> # to get adresse.\n\nI take care of the printing 😽️')
+    update.message.reply_text('- write me a message.\n- Send me a picture.\n- Send me an URL to print web page.\n- Send /qr <text> # to get & print QRCode\n- Send /meteo <city> # to get weather.\n- Send /weather <ICAO> # to get METAR weather.\n- Send /job # to get jobs of the day.\n- Send /iss # to know peoples in space.\n- Send /number <1234> # to get some info about it.\n- Send /geo <45.12345 04.12345> # to get address.\n\nI take care of the printing 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -146,8 +146,8 @@ def number(update, context):
     update.message.reply_text('Meow! 😻️ /help')
 
 def geo(update, context):
-    """Return and print the adresse of coordonates when the command /geo is issued."""
-    update.message.reply_text('I print the adresse right away... 😺️')
+    """Return and print the address of coordonates when the command /geo is issued."""
+    update.message.reply_text('I print the address right away... 😺️')
     geo = update.message.text
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
