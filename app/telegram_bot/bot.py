@@ -18,30 +18,30 @@ TOKEN = 'YOURTOKEN'
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('😻️ Meow!\nyou can send /help to get some functions')
+    update.message.reply_text('🏁️ 😻 MeowwWelcome!\nYou can send /help to know what I can do')
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('- write me a message.\n- Send me a picture.\n- Send me an URL to print web page.\n- Send /qr <text> # to get & print QRCode\n- Send /meteo <city> # to get weather.\n- Send /weather <ICAO> # to get METAR weather.\n- Send /job # to get jobs of the day.\n- Send /iss # to know peoples in space.\n- Send /number <1234> # to get some info about it.\n- Send /geo <45.12345 04.12345> # to get address.\n\nI take care of the printing 😽️')
+    update.message.reply_text('- 📃️ Write me a message.\n- 🖼️ 📷️ Send me a picture.\n- 💻️ Send me an URL to print web page.\n- 🔳️ Send /qr <text> # to get & print QR-Code\n- 🌤️ Send /meteo <city> # to get weather.\n- 🛬️🛫️ Send /weather <ICAO> # to get METAR weather.\n- 🖥️ Send /job # to get jobs of the day.\n- 🚀️ Send /iss # to know peoples in space.\n- 🔢️ Send /number <1234> # to get some info about it.\n- 🗺️ Send /geo <45.12345 04.12345> # to get address.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
-    update.message.reply_text("I roll out some paper... 😺️")
+    update.message.reply_text("⬆️ I roll out some paper... 😺️")
     os.system("curl --location -X POST --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def weather(update, context):
     """Print the airport weather when the command /weather is issued."""
-    update.message.reply_text('I print the airport weather... 😺️')
+    update.message.reply_text('🛬️🛫️ I print the airport weather... 😺️')
     weather = update.message.text
     weather = weather.replace("/weather ", "")
     os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > /home/your/path/catprinter/app/meteo+/weather.txt")
     os.system("cd /home/your/path/catprinter/app/meteo+ && ./weather.sh")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def meteo(update, context):
     """Print the city weather when the command /meteo is issued."""
-    update.message.reply_text('I print the city weather... 😺️')
+    update.message.reply_text('🌤️ I print the city weather... 😺️')
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
     r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
@@ -80,45 +80,45 @@ def meteo(update, context):
     os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@2x.png /home/your/path/catprinter/app/meteo+/icon.png')
     os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
     os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
-    update.message.reply_text('I print the jobs... 😺️')
+    update.message.reply_text('🖥️ I print the jobs... 😺️')
     os.system("cd /home/your/path/catprinter/app/job && ./job.sh")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def text(update, context):
     """Print the user message."""
-    update.message.reply_text("I print what you wrote... 😺️")
+    update.message.reply_text("📃️ I print what you wrote... 😺️")
     f = open("/home/your/path/catprinter/app/message/message.txt", "w")
     msg = update.message.text
     f.write(msg.replace(";", ","))
     f.close()
     os.system("cd /home/your/path/catprinter/app/message && ./message.sh")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def image(update, context):
     """Print the user image."""
-    update.message.reply_text("I print it right away... 😺️")
+    update.message.reply_text("🖼️📷️ I print it right away... 😺️")
 
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
     obj.download(custom_path="/home/your/path/catprinter/app/telegram_bot/file.jpg")
 
     os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/telegram_bot/file.jpg\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def regex(update, context):
     """Print the user URL."""
-    update.message.reply_text('I print this page right away... 😺️')
+    update.message.reply_text('💻️ I print this page right away... 😺️')
     os.system("wkhtmltoimage --width 384 " + update.message.text + " /home/your/path/catprinter/app/web_print/test.png")
     os.system("curl --location -X POST --form 'image=@/home/your/path/catprinter/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def iss(update, context):
     """Return and print the astronauts name when the command /iss is issued."""
-    update.message.reply_text('I print astronauts names right away... 😺️')
+    update.message.reply_text('🚀️ I print astronauts names right away... 😺️')
     r = requests.get("http://api.open-notify.org/astros.json")
     astros = r.json()
     people = astros['people']
@@ -130,11 +130,11 @@ def iss(update, context):
 
     iss_info =  f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
     os.system("curl --location -X POST --form 'text=\"" + iss_info[:-1] + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def number(update, context):
     """Return and print the number info when the command /number is issued."""
-    update.message.reply_text('I print number informations right away... 😺️')
+    update.message.reply_text('🔢️ I print number informations right away... 😺️')
     number = update.message.text
     number = number.replace("/number ", "")
 
@@ -143,11 +143,11 @@ def number(update, context):
     number_res = response['text']
 
     os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def geo(update, context):
     """Return and print the address of coordonates when the command /geo is issued."""
-    update.message.reply_text('I print the address right away... 😺️')
+    update.message.reply_text('🗺️ I print the address right away... 😺️')
     geo = update.message.text
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
@@ -158,11 +158,11 @@ def geo(update, context):
     location = response['display_name']
 
     os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def qr(update, context):
     """Return and print the QR Code when the command /qr is issued."""
-    update.message.reply_text('I print the QR Code right away... 😺️')
+    update.message.reply_text('🔳️ I print the QR-Code right away... 😺️')
     code = update.message.text
     code = code.replace("/qr ", "")
     qr = qrcode.QRCode(
@@ -182,12 +182,12 @@ def qr(update, context):
     os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/telegram_bot/qrcode.png\"' 'localhost:5000'")
     os.system("curl --location -X POST --form 'text=\"" + code + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_photo(open("/home/your/path/catprinter/app/telegram_bot/qrcode1.png", "rb"))
-    update.message.reply_text('Meow! 😻️ /help')
+    update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-    update.message.reply_text('Meow? 😼️ /help')
+    update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def main():
     """Start the bot."""
