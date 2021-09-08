@@ -126,7 +126,7 @@ def iss(update, context):
     people_in_space = []
     for d in people:
         people_in_space.append(d['name']+" (")
-	people_in_space.append(d['craft']+")\n")
+        people_in_space.append(d['craft']+")\n")
 
     iss_info =  f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
     os.system("curl --location -X POST --form 'text=\"" + iss_info[:-1] + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
@@ -141,7 +141,7 @@ def number(update, context):
     r = requests.get('http://numbersapi.com/'+number+'/trivia?json')
     response = r.json()
     number_res = response['text']
-	
+
     os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('Meow! 😻️ /help')
 
@@ -152,11 +152,11 @@ def geo(update, context):
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
     lon = geo[9:21]
-	
+
     r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
     response = r.json()
     location = response['display_name']
-	
+
     os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('Meow! 😻️ /help')
 
