@@ -23,7 +23,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('- 📃️ Write me a message.\n\n- 🖼️ 📷️ Send me a picture.\n\n- 💻️ Send me an URL to print web page.\n\n- 🔳️ /qr <text> # to get & print QR-Code\n\n- 🌤️ /meteo <city> # to print weather.\n\n- 🛬️🛫️ /weather <ICAO> # to print METAR weather.\n\n- 🖥️ /job # to print jobs of the day.\n\n- 🚀️ /iss # to know peoples in space.\n\n- 🌌️ /astro <sign> # to print horoscope\n\n- 🔢️ /number <1234> # to print some info about it.\n\n- 🗺️ /geo <45.12345 04.12345> # to print address.\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
