@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 # based on https://github.com/amber-sixel/PythonCatPrinter.git
-
 # can be used as a raw postscript printer (a4, one page only) on port 9100
 #
 # status : curl --location --request GET 'localhost:5000'
