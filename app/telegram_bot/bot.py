@@ -18,11 +18,11 @@ TOKEN = 'YOURTOKEN'
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('🏁️ 😻 MeowwWelcome!\nYou can send /help to know what I can do')
+    update.message.reply_text('🏁️ 😻 MeowwWelcome!\n\nYou can send /help to know what I can do')
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('- 📃️ Write me a message.\n- 🖼️ 📷️ Send me a picture.\n- 💻️ Send me an URL to print web page.\n- 🔳️ Send /qr <text> # to get & print QR-Code\n- 🌤️ Send /meteo <city> # to get weather.\n- 🛬️🛫️ Send /weather <ICAO> # to get METAR weather.\n- 🖥️ Send /job # to get jobs of the day.\n- 🚀️ Send /iss # to know peoples in space.\n- 🔢️ Send /number <1234> # to get some info about it.\n- 🗺️ Send /geo <45.12345 04.12345> # to get address.\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('- 📃️ Write me a message.\n\n- 🖼️ 📷️ Send me a picture.\n\n- 💻️ Send me an URL to print web page.\n\n- 🔳️ /qr <text> # to get & print QR-Code\n\n- 🌤️ /meteo <city> # to print weather.\n\n- 🛬️🛫️ /weather <ICAO> # to print METAR weather.\n\n- 🖥️ /job # to print jobs of the day.\n\n- 🚀️ /iss # to know peoples in space.\n\n- 🌌️ /astro <sign> # to print horoscope\n\n- 🔢️ /number <1234> # to print some info about it.\n\n- 🗺️ /geo <45.12345 04.12345> # to print address.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -76,8 +76,8 @@ def meteo(update, context):
     f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
     f.close()
 
-    os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@2x.png')
-    os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@2x.png /home/your/path/catprinter/app/meteo+/icon.png')
+    os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
+    os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@4x.png /home/your/path/catprinter/app/meteo+/icon.png')
     os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
     os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
@@ -184,6 +184,30 @@ def qr(update, context):
     update.message.reply_photo(open("/home/your/path/catprinter/app/telegram_bot/qrcode1.png", "rb"))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
+def astro(update, context):
+    """Print the astro when the command /astro is issued."""
+    update.message.reply_text('🌌️ I print the horoscope right away... 😺️')
+    sign = update.message.text
+    sign = sign.replace("/astro ", "")
+    r = requests.post('https://aztro.sameerkumar.website/?sign='+sign+'&day=today')
+    response = r.json()
+
+    dt = response['current_date']
+    compat = response['compatibility']
+    lucky_time = response['lucky_time']
+    lucky_num = response['lucky_number']
+    color = response['color']
+    dt_range = response['date_range']
+    mood = response['mood']
+    desc = response['description']
+
+    f = open("/home/your/path/catprinter/app/astro/astro.txt", "w")
+    f.write(f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\nLucky time: {lucky_time}\nLucky number: {lucky_num}\nColor: {color}\nMood: {mood}')
+    f.close()
+
+    os.system("cd /home/your/path/catprinter/app/astro && ./astro.sh")
+    update.message.reply_text('✅️ Meow! 😻️ /help')
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -210,6 +234,7 @@ def main():
     dp.add_handler(CommandHandler("number", number))
     dp.add_handler(CommandHandler("geo", geo))
     dp.add_handler(CommandHandler("qr", qr))
+    dp.add_handler(CommandHandler("astro", astro))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, text))
