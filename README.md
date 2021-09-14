@@ -14,6 +14,12 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 > cd /home/your/path/to/this/folder && python3 -tt print_server.py
 ## Start Bot Script:
 > cd /home/your/path/to/app/telegram_bot && python3 bot.py
+## Start Cat_Monitor Script:
+> cd /home/your/path/to/app/monitor && python3 cat_monitor.py
+## Crontab:
+> @reboot cd /home/your/path/catprinter && python3 -tt print_server.py
+> @reboot sh /home/your/path/catprinter/app/monitor/cat_monitor.sh > /home/your/path/catprinter/app/monitor/cat_monitor.log 2>&1
+> @reboot cd /home/your/path/catprinter/app/telegram_bot && python3 bot.py
 
 ## HTML to image:
 > wkhtmltoimage --width 384 https://example.com /home/your/path/catprinter/test.png
