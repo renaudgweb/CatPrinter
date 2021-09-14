@@ -46,42 +46,48 @@ def meteo(update, context):
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
     r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
-    response = r.json()
 
-    desc = response['weather'][0]['description']
-    icon = response['weather'][0]['icon']
-    temp = response['main']['temp']
-    temp_feels = response['main']['feels_like']
-    temp_min = response['main']['temp_min']
-    temp_max = response['main']['temp_max']
-    pres = response['main']['pressure']
-    hum = response['main']['humidity']
-    vis = response['visibility']
-    wind_speed = response['wind']['speed']
-    wind_dir = response['wind']['deg']
-    clouds = response['clouds']['all']
+    if r.status_code == 200:
 
-    dt = response['dt']
-    dt = datetime.fromtimestamp(dt)
-    date = dt.strftime("%a %d %b %Y, %H:%M:%S")
-    sunrise = response['sys']['sunrise']
-    sunrise = datetime.fromtimestamp(sunrise)
-    sunrise_date = sunrise.strftime("%H:%M")
-    sunset = response['sys']['sunset']
-    sunset = datetime.fromtimestamp(sunset)
-    sunset_date = sunset.strftime("%H:%M")
+        response = r.json()
 
-    city = response['name']
+        desc = response['weather'][0]['description']
+        icon = response['weather'][0]['icon']
+        temp = response['main']['temp']
+        temp_feels = response['main']['feels_like']
+        temp_min = response['main']['temp_min']
+        temp_max = response['main']['temp_max']
+        pres = response['main']['pressure']
+        hum = response['main']['humidity']
+        vis = response['visibility']
+        wind_speed = response['wind']['speed']
+        wind_dir = response['wind']['deg']
+        clouds = response['clouds']['all']
 
-    f = open("/home/your/path/catprinter/app/meteo+/meteo.txt", "w")
-    f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
-    f.close()
+        dt = response['dt']
+        dt = datetime.fromtimestamp(dt)
+        date = dt.strftime("%a %d %b %Y, %H:%M:%S")
+        sunrise = response['sys']['sunrise']
+        sunrise = datetime.fromtimestamp(sunrise)
+        sunrise_date = sunrise.strftime("%H:%M")
+        sunset = response['sys']['sunset']
+        sunset = datetime.fromtimestamp(sunset)
+        sunset_date = sunset.strftime("%H:%M")
 
-    os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
-    os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@4x.png /home/your/path/catprinter/app/meteo+/icon.png')
-    os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
-    os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('✅️ Meow! 😻️ /help')
+        city = response['name']
+
+        f = open("/home/your/path/catprinter/app/meteo+/meteo.txt", "w")
+        f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
+        f.close()
+
+        os.system('wget -P /home/your/path/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
+        os.system('mv /home/your/path/catprinter/app/meteo+/'+icon+'@4x.png /home/your/path/catprinter/app/meteo+/icon.png')
+        os.system("cd /home/your/path/catprinter/app/meteo+ && ./meteo.sh")
+        os.system("curl --location -X POST --form 'image=@\"/home/your/path/catprinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+
+    else:
+        update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
@@ -140,11 +146,17 @@ def number(update, context):
     number = number.replace("/number ", "")
 
     r = requests.get('http://numbersapi.com/'+number+'/trivia?json')
-    response = r.json()
-    number_res = response['text']
 
-    os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('✅️ Meow! 😻️ /help')
+    if r.status_code == 200:
+
+        response = r.json()
+        number_res = response['text']
+
+        os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+
+    else:
+        update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def geo(update, context):
     """Return and print the address of coordonates when the command /geo is issued."""
@@ -155,11 +167,17 @@ def geo(update, context):
     lon = geo[9:21]
 
     r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
-    response = r.json()
-    location = response['display_name']
 
-    os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('✅️ Meow! 😻️ /help')
+    if r.status_code == 200:
+
+        response = r.json()
+        location = response['display_name']
+
+        os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+
+    else:
+        update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def qr(update, context):
     """Return and print the QR Code when the command /qr is issued."""
@@ -191,23 +209,29 @@ def astro(update, context):
     sign = update.message.text
     sign = sign.replace("/astro ", "")
     r = requests.post('https://aztro.sameerkumar.website/?sign='+sign+'&day=today')
-    response = r.json()
 
-    dt = response['current_date']
-    compat = response['compatibility']
-    lucky_time = response['lucky_time']
-    lucky_num = response['lucky_number']
-    color = response['color']
-    dt_range = response['date_range']
-    mood = response['mood']
-    desc = response['description']
+    if r.status_code == 200:
 
-    f = open("/home/your/path/catprinter/app/astro/astro.txt", "w")
-    f.write(f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\nLucky time: {lucky_time}\nLucky number: {lucky_num}\nColor: {color}\nMood: {mood}')
-    f.close()
+        response = r.json()
 
-    os.system("cd /home/your/path/catprinter/app/astro && ./astro.sh")
-    update.message.reply_text('✅️ Meow! 😻️ /help')
+        dt = response['current_date']
+        compat = response['compatibility']
+        lucky_time = response['lucky_time']
+        lucky_num = response['lucky_number']
+        color = response['color']
+        dt_range = response['date_range']
+        mood = response['mood']
+        desc = response['description']
+
+        f = open("/home/your/path/catprinter/app/astro/astro.txt", "w")
+        f.write(f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\nLucky time: {lucky_time}\nLucky number: {lucky_num}\nColor: {color}\nMood: {mood}')
+        f.close()
+
+        os.system("cd /home/your/path/catprinter/app/astro && ./astro.sh")
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+
+    else:
+        update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def error(update, context):
     """Log Errors caused by Updates."""
