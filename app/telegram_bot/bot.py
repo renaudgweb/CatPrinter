@@ -34,7 +34,7 @@ def feed(update, context):
 def weather(update, context):
     """Print the airport weather when the command /weather is issued."""
     update.message.reply_text('🛬️🛫️ I print the airport weather... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/weather.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/weather.wav")
     weather = update.message.text
     weather = weather.replace("/weather ", "")
     os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > /home/your/path/catprinter/app/meteo+/weather.txt")
@@ -44,7 +44,7 @@ def weather(update, context):
 def meteo(update, context):
     """Print the city weather when the command /meteo is issued."""
     update.message.reply_text('🌤️ I print the city weather... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/meteo.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/meteo.wav")
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
     r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
@@ -94,14 +94,14 @@ def meteo(update, context):
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
     update.message.reply_text('🖥️ I print the jobs... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/job.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/job.wav")
     os.system("cd /home/your/path/catprinter/app/job && ./job.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def text(update, context):
     """Print the user message."""
     update.message.reply_text("📃️ I print what you wrote... 😺️")
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/message.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/message.wav")
     f = open("/home/your/path/catprinter/app/message/message.txt", "w")
     msg = update.message.text
     f.write(msg.replace(";", ","))
@@ -112,7 +112,7 @@ def text(update, context):
 def image(update, context):
     """Print the user image."""
     update.message.reply_text("🖼️📷️ I print it right away... 😺️")
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/photo.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/photo.wav")
 
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
@@ -124,7 +124,7 @@ def image(update, context):
 def regex(update, context):
     """Print the user URL."""
     update.message.reply_text('💻️ I print this page right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/url.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/url.wav")
     os.system("wkhtmltoimage --width 384 " + update.message.text + " /home/your/path/catprinter/app/web_print/test.png")
     os.system("curl --location -X POST --form 'image=@/home/your/path/catprinter/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
@@ -132,7 +132,7 @@ def regex(update, context):
 def iss(update, context):
     """Return and print the astronauts name when the command /iss is issued."""
     update.message.reply_text('🚀️ I print astronauts names right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/iss.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/iss.wav")
     r = requests.get("http://api.open-notify.org/astros.json")
     astros = r.json()
     people = astros['people']
@@ -149,7 +149,7 @@ def iss(update, context):
 def number(update, context):
     """Return and print the number info when the command /number is issued."""
     update.message.reply_text('🔢️ I print number informations right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/number.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/number.wav")
     number = update.message.text
     number = number.replace("/number ", "")
 
@@ -169,7 +169,7 @@ def number(update, context):
 def geo(update, context):
     """Return and print the address of coordonates when the command /geo is issued."""
     update.message.reply_text('🗺️ I print the address right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/geo.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/geo.wav")
     geo = update.message.text
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
@@ -191,7 +191,7 @@ def geo(update, context):
 def qr(update, context):
     """Return and print the QR Code when the command /qr is issued."""
     update.message.reply_text('🔳️ I print the QR-Code right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/qrcode.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/qrcode.wav")
     code = update.message.text
     code = code.replace("/qr ", "")
     qr = qrcode.QRCode(
@@ -216,7 +216,7 @@ def qr(update, context):
 def astro(update, context):
     """Print the astro when the command /astro is issued."""
     update.message.reply_text('🌌️ I print the horoscope right away... 😺️')
-    os.system("aplay /home/your/path/Musique/bruitages/catprinterbot/astro.wav")
+    os.system("aplay -D hw:1,0 -q /home/your/path/Musique/bruitages/catprinterbot/astro.wav")
     sign = update.message.text
     sign = sign.replace("/astro ", "")
     r = requests.post('https://aztro.sameerkumar.website/?sign='+sign+'&day=today')
