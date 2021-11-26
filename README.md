@@ -22,6 +22,9 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 > @reboot sh /home/your/path/catprinter/app/monitor/cat_monitor.sh > /home/your/path/catprinter/app/monitor/cat_monitor.log 2>&1
 
 > @reboot cd /home/your/path/catprinter/app/telegram_bot && python3 bot.py
+### Sudo Crontab:
+> @reboot cd /home/yourpath/ && ./start_catprinterbot.sh
+> 
 
 ## HTML to image:
 > wkhtmltoimage --width 384 https://example.com /home/your/path/catprinter/test.png
