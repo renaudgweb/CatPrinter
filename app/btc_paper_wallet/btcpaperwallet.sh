@@ -11,7 +11,7 @@ curl --location -X POST --form text="$txt1" 'localhost:5000'
 
 curl --location -X POST --form text="PRIVATE KEY:" --form 'feed="100"' 'localhost:5000'
 
-curl --location -X POST --form text="------------------------------" 'localhost:5000'
+curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
 
 curl --location -X POST --form 'image=@/home/rengweb/Documents/catprinter/app/btc_paper_wallet/publicwalletqr.png' 'localhost:5000'
 
@@ -24,3 +24,5 @@ curl --location -X POST --form 'image=@/home/rengweb/Documents/catprinter/app/bt
 
 sudo rm privatekey-qrcode.png
 sudo rm publicwalletqr.png
+echo "" > txt1.txt
+echo "" > txt2.txt
