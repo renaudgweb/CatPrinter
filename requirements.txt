@@ -3,3 +3,4 @@ bleak
 requests
 beautifulsoup4
 qrcode
+bitcoin==1.1.42
