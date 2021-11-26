@@ -250,7 +250,7 @@ def astro(update, context):
 def BTC_paper_wallet(update, context):
     """Print a new Bitcoin paper wallet when the command /btc is issued"""
     update.message.reply_text('I print the \u20BF paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/astro.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
     os.system("cd /home/yourpath/Documents/catprinter/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
