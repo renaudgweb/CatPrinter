@@ -2,6 +2,8 @@
 
 /usr/local/opt/python-3.9.6/bin/python3.9 btcpaperwallet.py
 
+curl --location -X POST --form text="DO NOT LOSE OR SHARE THIS PRIVATE KEY !" 'localhost:5000'
+
 curl --location -X POST --form 'image=@/home/your/path/catprinter/app/btc_paper_wallet/privatekey-qrcode.png' 'localhost:5000'
 
 txt1=$(<txt1.txt)
