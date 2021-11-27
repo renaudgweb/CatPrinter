@@ -1,4 +1,5 @@
 import qrcode
+from qrcode.image.styledpil import StyledPilImage
 import numpy
 from ecdsa import SigningKey, SECP256k1
 import sha3
