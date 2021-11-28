@@ -47,3 +47,7 @@ img1.save("publicwalletqr.png")
 qr.add_data(priv)
 img2 = qr.make_image(image_factory=StyledPilImage)
 img2.save("privatekey-qrcode.png")
+
+qr.add_data('https://www.blockchain.com/btc/address/'+addr)
+img3 = qr.make_image(image_factory=StyledPilImage)
+img3.save("balancekey-qrcode.png")
