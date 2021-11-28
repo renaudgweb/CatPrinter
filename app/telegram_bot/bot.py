@@ -258,8 +258,8 @@ def BTC_paper_wallet(update, context):
 def ETH_paper_wallet(update, context):
     """Print a new Ethereum paper wallet when the command /eth is issued"""
     update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/rengweb/Musique/bruitages/catprinterbot/btc.wav")
-    os.system("cd /home/rengweb/Documents/catprinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
+    os.system("cd /home/yourpath/Documents/catprinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 
