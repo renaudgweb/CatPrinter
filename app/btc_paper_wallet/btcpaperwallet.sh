@@ -19,7 +19,7 @@ curl --location -X POST --form text="------------------------------" --form 'fee
 
 curl --location -X POST --form 'image=@/home/yourpath/Documents/catprinter/app/btc_paper_wallet/balancekey-qrcode.png' 'localhost:5000'
 
-curl --location -X POST --form text="Balance & transactions (blockchain.com) :" 'localhost:5000'
+curl --location -X POST --form text="Balance & transactions (blockchain.com) :" --form 'feed="100"' 'localhost:5000'
 
 curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
 
