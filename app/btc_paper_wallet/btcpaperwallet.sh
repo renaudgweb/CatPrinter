@@ -33,6 +33,7 @@ curl --location -X POST --form text="PUBLIC KEY:" --form 'feed="100"' 'localhost
 curl --location -X POST --form 'image=@/home/your/path/catprinter/app/btc_paper_wallet/btc_logo.png' --form 'feed="100"' 'localhost:5000'
 
 sudo rm privatekey-qrcode.png
+sudo rm balancekey-qrcode.png
 sudo rm publicwalletqr.png
 echo "" > txt1.txt
 echo "" > txt2.txt
