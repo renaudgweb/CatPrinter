@@ -15,9 +15,7 @@ curl --location -X POST --form text="------------------------------" --form 'fee
 
 curl --location -X POST --form 'image=@/home/yourpath/Documents/catprinter/app/eth_paper_wallet/balancekey-qrcode.png' 'localhost:5000'
 
-curl --location -X POST --form text="(etherscan.io)" 'localhost:5000'
-
-curl --location -X POST --form text="Balance & transactions :" --form 'feed="100"' 'localhost:5000'
+curl --location -X POST --form text="Balance & transactions (etherscan.io) :" --form 'feed="100"' 'localhost:5000'
 
 curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
 
