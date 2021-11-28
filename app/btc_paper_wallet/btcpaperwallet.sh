@@ -2,6 +2,10 @@
 
 /usr/local/opt/python-3.9.6/bin/python3.9 btcpaperwallet.py
 
+sed -i 's/.\{30\}/& /g' txt1.txt
+
+sed -i 's/.\{30\}/& /g' txt2.txt
+
 curl --location -X POST --form text="DO NOT LOSE OR SHARE THIS PRIVATE KEY !" 'localhost:5000'
 
 curl --location -X POST --form 'image=@/home/your/path/catprinter/app/btc_paper_wallet/privatekey-qrcode.png' 'localhost:5000'
