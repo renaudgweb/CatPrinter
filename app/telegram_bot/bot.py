@@ -13,7 +13,7 @@ from qrcode.image.styles.colormasks import SquareGradiantColorMask
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = '1987919816:AAFu9fYI6s26T8R_nCi49X4diUywMRAk-MI'
+TOKEN = 'YOURTOKEN'
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -50,7 +50,7 @@ def meteo(update, context):
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/meteo.wav")
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
-    r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=247554dd7e56616e5aba0fd7e2d5a89c')
+    r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
 
     if r.status_code == 200:
 
