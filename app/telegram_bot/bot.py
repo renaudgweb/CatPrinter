@@ -25,7 +25,7 @@ def start(update, context):
 def help(update, context):
     """Send a message when the command /help is issued."""
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/help.wav")
-    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -253,6 +253,15 @@ def BTC_paper_wallet(update, context):
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
     os.system("cd /home/yourpath/Documents/catprinter/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+    update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
+    
+def ETH_paper_wallet(update, context):
+    """Print a new Ethereum paper wallet when the command /eth is issued"""
+    update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/rengweb/Musique/bruitages/catprinterbot/btc.wav")
+    os.system("cd /home/rengweb/Documents/catprinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
+    update.message.reply_text('✅️ Meow! 😻️ /help')
+    update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -282,6 +291,7 @@ def main():
     dp.add_handler(CommandHandler("qr", qr))
     dp.add_handler(CommandHandler("astro", astro))
     dp.add_handler(CommandHandler("btc", BTC_paper_wallet))
+    dp.add_handler(CommandHandler("eth", ETH_paper_wallet))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, text))
