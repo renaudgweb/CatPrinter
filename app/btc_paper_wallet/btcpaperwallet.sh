@@ -13,6 +13,12 @@ curl --location -X POST --form text="PRIVATE KEY:" --form 'feed="100"' 'localhos
 
 curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
 
+curl --location -X POST --form 'image=@/home/yourpath/Documents/catprinter/app/btc_paper_wallet/balancekey-qrcode.png' 'localhost:5000'
+
+curl --location -X POST --form text="Balance & transactions (blockchain.com) :" --form 'feed="100"' 'localhost:5000'
+
+curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
+
 curl --location -X POST --form 'image=@/home/your/path/catprinter/app/btc_paper_wallet/publicwalletqr.png' 'localhost:5000'
 
 txt2=$(<txt2.txt)
