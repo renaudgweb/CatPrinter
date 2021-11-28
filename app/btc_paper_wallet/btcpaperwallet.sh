@@ -9,7 +9,7 @@ curl --location -X POST --form 'image=@/home/your/path/catprinter/app/btc_paper_
 txt1=$(<txt1.txt)
 curl --location -X POST --form text="$txt1" 'localhost:5000'
 
-curl --location -X POST --form text="PRIVATE KEY:" --form 'feed="100"' 'localhost:5000'
+curl --location -X POST --form text="PRIVATE KEY:" 'localhost:5000'
 
 curl --location -X POST --form text="------------------------------" --form 'feed="100"' 'localhost:5000'
 
