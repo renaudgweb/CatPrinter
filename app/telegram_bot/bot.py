@@ -251,7 +251,7 @@ def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
-    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token&vs_currencies=eur%2Cusd&include_last_updated_at=true")
+    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token%2Csolana%2Ccardano%2Cterra-luna%2Cavalanche-2%2Cpolkadot%2Caave&vs_currencies=eur%2Cusd&include_last_updated_at=true")
 
     if r.status_code == 200:
 
@@ -262,23 +262,68 @@ def crypto(update, context):
         btc_usd = btc['usd']
         btc_stp = btc['last_updated_at']
         btc_dt = datetime.fromtimestamp(btc_stp)
-        btc_time = btc_dt.strftime("%d/%m/%Y %H:%M:%S")
+        btc_time = btc_dt.strftime("%H:%M:%S")
 
         eth = cryptos['ethereum']
         eth_eur = eth['eur']
         eth_usd = eth['usd']
         eth_stp = eth['last_updated_at']
         eth_dt = datetime.fromtimestamp(eth_stp)
-        eth_time = eth_dt.strftime("%d/%m/%Y %H:%M:%S")
+        eth_time = eth_dt.strftime("%H:%M:%S")
 
         bat = cryptos['basic-attention-token']
         bat_eur = bat['eur']
         bat_usd = bat['usd']
         bat_stp = bat['last_updated_at']
         bat_dt = datetime.fromtimestamp(bat_stp)
-        bat_time = bat_dt.strftime("%d/%m/%Y %H:%M:%S")
+        bat_time = bat_dt.strftime("%H:%M:%S")
 
-        crypto_info =  f"Bitcoin:\n{btc_eur}€\n{btc_usd}$\n{btc_time}\n--------------------\nEthereum:\n{eth_eur}€\n{eth_usd}$\n{eth_time}\n--------------------\nBasic Attention Token:\n{bat_eur}€\n{bat_usd}$\n{bat_time}"
+        sol = cryptos['solana']
+        sol_eur = sol['eur']
+        sol_usd = sol['usd']
+        sol_stp = sol['last_updated_at']
+        sol_dt = datetime.fromtimestamp(sol_stp)
+        sol_time = sol_dt.strftime("%H:%M:%S")
+
+        ada = cryptos['cardano']
+        ada_eur = ada['eur']
+        ada_usd = ada['usd']
+        ada_stp = ada['last_updated_at']
+        ada_dt = datetime.fromtimestamp(ada_stp)
+        ada_time = ada_dt.strftime("%H:%M:%S")
+
+        luna = cryptos['terra-luna']
+        luna_eur = luna['eur']
+        luna_usd = luna['usd']
+        luna_stp = luna['last_updated_at']
+        luna_dt = datetime.fromtimestamp(luna_stp)
+        luna_time = luna_dt.strftime("%H:%M:%S")
+
+        avax = cryptos['avalanche-2']
+        avax_eur = avax['eur']
+        avax_usd = avax['usd']
+        avax_stp = avax['last_updated_at']
+        avax_dt = datetime.fromtimestamp(avax_stp)
+        avax_time = avax_dt.strftime("%H:%M:%S")
+
+        dot = cryptos['polkadot']
+        dot_eur = dot['eur']
+        dot_usd = dot['usd']
+        dot_stp = dot['last_updated_at']
+        dot_dt = datetime.fromtimestamp(dot_stp)
+        dot_time = dot_dt.strftime("%H:%M:%S")
+
+        aave = cryptos['aave']
+        aave_eur = aave['eur']
+        aave_usd = aave['usd']
+        aave_stp = aave['last_updated_at']
+        aave_dt = datetime.fromtimestamp(aave_stp)
+        aave_time = aave_dt.strftime("%H:%M:%S")
+
+        dt = datetime.fromtimestamp(btc_stp)
+        date = dt.strftime("%d/%m/%y")
+        crypto_info =  f"Coingecko.com {date}\n\n--------------------\nBitcoin (BTC):\n{btc_eur} EUR\n{btc_usd} USD\n{btc_time}\n--------------------\nEthereum (ETH):\n{eth_eur} EUR\n{eth_usd} USD\n{eth_time}\n--------------------\nBasic Attention Token (BAT):\n{bat_eur} EUR\n{bat_usd} USD\n{bat_time}\n--------------------\nSolana (SOL):\n{sol_eur} EUR\n{sol_usd} USD\n{sol_time}\n--------------------\nCardano (ADA):\n{ada_eur} EUR\n{ada_usd} USD\n{ada_time}\n--------------------\nTerra-Luna (LUNA):\n{luna_eur} EUR\n{luna_usd} USD\n{luna_time}\n--------------------\nAvalanche (AVAX):\n{avax_eur} EUR\n{avax_usd} USD\n{avax_time}\n--------------------\nPolkadot (DOT):\n{dot_eur} EUR\n{dot_usd} USD\n{dot_time}\n--------------------\nAave (AAVE):\n{aave_eur} EUR\n{aave_usd} USD\n{aave_time}\n--------------------"
+        
         os.system("curl --location -X POST --form 'text=\"" + crypto_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
         update.message.reply_text('✅️ Meow! 😻️ /help')
         update.message.reply_text('🚀️🌙️ TO THE MOON ! 😻️')
