@@ -25,7 +25,7 @@ def start(update, context):
 def help(update, context):
     """Send a message when the command /help is issued."""
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/help.wav")
-    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -246,6 +246,45 @@ def astro(update, context):
 
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
+        
+def crypto(update, context):
+    """Return and print the crypto prices when the command /crypto is issued."""
+    update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/bu/Musique/bruitages/catprinterbot/btc.wav")
+    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token&vs_currencies=eur%2Cusd&include_last_updated_at=true")
+
+    if r.status_code == 200:
+
+        cryptos = r.json()
+
+        btc = cryptos['bitcoin']
+        btc_eur = btc['eur']
+        btc_usd = btc['usd']
+        btc_stp = btc['last_updated_at']
+        btc_dt = datetime.fromtimestamp(btc_stp)
+        btc_time = btc_dt.strftime("%d/%m/%Y %H:%M:%S")
+
+        eth = cryptos['ethereum']
+        eth_eur = eth['eur']
+        eth_usd = eth['usd']
+        eth_stp = eth['last_updated_at']
+        eth_dt = datetime.fromtimestamp(eth_stp)
+        eth_time = eth_dt.strftime("%d/%m/%Y %H:%M:%S")
+
+        bat = cryptos['basic-attention-token']
+        bat_eur = bat['eur']
+        bat_usd = bat['usd']
+        bat_stp = bat['last_updated_at']
+        bat_dt = datetime.fromtimestamp(bat_stp)
+        bat_time = bat_dt.strftime("%d/%m/%Y %H:%M:%S")
+
+        crypto_info =  f"Bitcoin:\n{btc_eur}€\n{btc_usd}$\n{btc_time}\n--------------------\nEthereum:\n{eth_eur}€\n{eth_usd}$\n{eth_time}\n--------------------\nBasic Attention Token:\n{bat_eur}€\n{bat_usd}$\n{bat_time}"
+        os.system("curl --location -X POST --form 'text=\"" + crypto_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+        update.message.reply_text('🚀️🌙️ TO THE MOON ! 😻️')
+
+    else:
+        update.message.reply_text('❌️ Meow? 😼️ /help')
 
 def BTC_paper_wallet(update, context):
     """Print a new Bitcoin paper wallet when the command /btc is issued"""
@@ -292,6 +331,7 @@ def main():
     dp.add_handler(CommandHandler("astro", astro))
     dp.add_handler(CommandHandler("btc", BTC_paper_wallet))
     dp.add_handler(CommandHandler("eth", ETH_paper_wallet))
+    dp.add_handler(CommandHandler("crypto", crypto))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, text))
