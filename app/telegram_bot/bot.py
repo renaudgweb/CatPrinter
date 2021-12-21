@@ -250,7 +250,7 @@ def astro(update, context):
 def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/bu/Musique/bruitages/catprinterbot/btc.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
     r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token&vs_currencies=eur%2Cusd&include_last_updated_at=true")
 
     if r.status_code == 200:
