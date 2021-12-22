@@ -251,7 +251,7 @@ def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
-    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token%2Csolana%2Ccardano%2Cterra-luna%2Cavalanche-2%2Cpolkadot%2Caave&vs_currencies=eur%2Cusd&include_last_updated_at=true")
+    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token%2Csolana%2Ccardano%2Cterra-luna%2Cavalanche-2%2Cpolkadot%2Caave%2Cswissborg&vs_currencies=eur%2Cusd&include_last_updated_at=true")
 
     if r.status_code == 200:
 
@@ -319,11 +319,18 @@ def crypto(update, context):
         aave_stp = aave['last_updated_at']
         aave_dt = datetime.fromtimestamp(aave_stp)
         aave_time = aave_dt.strftime("%H:%M:%S")
+        
+        chsb = cryptos['swissborg']
+        chsb_eur = chsb['eur']
+        chsb_usd = chsb['usd']
+        chsb_stp = chsb['last_updated_at']
+        chsb_dt = datetime.fromtimestamp(chsb_stp)
+        chsb_time = chsb_dt.strftime("%H:%M:%S")
 
         dt = datetime.fromtimestamp(btc_stp)
         date = dt.strftime("%d/%m/%y")
-        crypto_info =  f"Coingecko.com {date}\n\n--------------------\nBitcoin (BTC):\n{btc_eur} EUR\n{btc_usd} USD\n{btc_time}\n--------------------\nEthereum (ETH):\n{eth_eur} EUR\n{eth_usd} USD\n{eth_time}\n--------------------\nBasic Attention Token (BAT):\n{bat_eur} EUR\n{bat_usd} USD\n{bat_time}\n--------------------\nSolana (SOL):\n{sol_eur} EUR\n{sol_usd} USD\n{sol_time}\n--------------------\nCardano (ADA):\n{ada_eur} EUR\n{ada_usd} USD\n{ada_time}\n--------------------\nTerra-Luna (LUNA):\n{luna_eur} EUR\n{luna_usd} USD\n{luna_time}\n--------------------\nAvalanche (AVAX):\n{avax_eur} EUR\n{avax_usd} USD\n{avax_time}\n--------------------\nPolkadot (DOT):\n{dot_eur} EUR\n{dot_usd} USD\n{dot_time}\n--------------------\nAave (AAVE):\n{aave_eur} EUR\n{aave_usd} USD\n{aave_time}\n--------------------"
-        
+        crypto_info =  f"Coingecko.com {date}\n\n--------------------\nBitcoin (BTC):\n{btc_eur} EUR\n{btc_usd} USD\n{btc_time}\n--------------------\nEthereum (ETH):\n{eth_eur} EUR\n{eth_usd} USD\n{eth_time}\n--------------------\nBasic Attention Token (BAT):\n{bat_eur} EUR\n{bat_usd} USD\n{bat_time}\n--------------------\nSolana (SOL):\n{sol_eur} EUR\n{sol_usd} USD\n{sol_time}\n--------------------\nCardano (ADA):\n{ada_eur} EUR\n{ada_usd} USD\n{ada_time}\n--------------------\nTerra-Luna (LUNA):\n{luna_eur} EUR\n{luna_usd} USD\n{luna_time}\n--------------------\nAvalanche (AVAX):\n{avax_eur} EUR\n{avax_usd} USD\n{avax_time}\n--------------------\nPolkadot (DOT):\n{dot_eur} EUR\n{dot_usd} USD\n{dot_time}\n--------------------\nAave (AAVE):\n{aave_eur} EUR\n{aave_usd} USD\n{aave_time}\n--------------------\nSwissBorg (CHSB):\n{chsb_eur} EUR\n{chsb_usd} USD\n{chsb_time}\n--------------------"
+
         os.system("curl --location -X POST --form 'text=\"" + crypto_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
         update.message.reply_text('✅️ Meow! 😻️ /help')
         update.message.reply_text('🚀️🌙️ TO THE MOON ! 😻️')
