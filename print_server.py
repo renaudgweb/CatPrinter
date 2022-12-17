@@ -31,7 +31,7 @@ import PIL.ImageFont
 import PIL.ImageChops
 import re
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 import threading
 
 app = Flask(__name__)
@@ -392,12 +392,6 @@ def create_text(text, font_name="Lucida_Console_Regular.ttf", font_size=12):
 
 
 @app.route("/", methods=['GET', 'POST'])
-def show_logs():
-  with open('app/monitor/start.txt', 'r') as f:
-    logs = f.read()
-  return render_template('logs.html', logs=logs)
-
-
 def http_server_upload():
     global image_queue, ready, device, status
     if request.method == 'POST':
