@@ -31,6 +31,7 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 
 ## HTML to image:
 > `wkhtmltoimage --width 384 https://example.com /home/your/path/catprinter/test.png`
+
 > `wkhtmltoimage --width 384 --height 500 https://example.com /home/your/path/catprinter/test.png`
 
 ## Send image:
