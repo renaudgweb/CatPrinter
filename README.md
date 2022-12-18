@@ -17,15 +17,15 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 ## Start Cat_Monitor Script:
 > `cd /home/your/path/to/app/monitor && python3 cat_monitor.py`
 ## Crontab:
-> `@reboot cd /home/your/path/catprinter && python3 -tt print_server.py >> /home/your/path/catprinter/app/monitor/start.txt 2>&1`
+> `@reboot cd /home/your/path/catprinter && python3 -tt print_server.py`
 
-> `@reboot sh /home/your/path/catprinter/app/monitor/cat_monitor.sh >> /home/your/path/catprinter/app/monitor/cat_monitor.txt 2>&1`
+> `@reboot sh /home/your/path/catprinter/app/monitor/cat_monitor.sh > /home/your/path/catprinter/app/monitor/cat_monitor.txt 2>&1`
 
-> `@reboot cd /home/your/path/catprinter/app/telegram_bot && sleep 15 && python3 bot.py >> /home/your/path/catprinter/app/monitor/start.txt 2>&1`
+> `@reboot cd /home/your/path/catprinter/app/telegram_bot && sleep 15 && python3 bot.py > /home/your/path/catprinter/app/monitor/start.txt 2>&1`
 
-> `* * * * * truncate -s 10M  /home/your/path/catprinter/app/monitor/start.txt`
+> `* * * * * truncate -s 2M  /home/your/path/catprinter/app/monitor/start.txt`
 
-> `* * * * * truncate -s 10M  /home/your/path/catprinter/app/monitor/cat_monitor.txt`
+> `* * * * * truncate -s 2M  /home/your/path/catprinter/app/monitor/cat_monitor.txt`
 ### Sudo Crontab:
 > `@reboot cd /home/yourpath/ && ./start_catprinterbot.sh`
 
