@@ -25,7 +25,7 @@ def start(update, context):
 def help(update, context):
     """Send a message when the command /help is issued."""
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/help.wav")
-    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from GPT-3.5 to the given prompt\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -360,7 +360,7 @@ def GPT(update, context):
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/rengweb/Musique/bruitages/catprinterbot/message.wav")
     gpt = update.message.text
     gpt = gpt.replace("/gpt ", "")
-    os.system("cd /home/rengweb/Documents/catprinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py " + gpt)
+    os.system("cd /home/rengweb/Documents/catprinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
     os.system("cd /home/rengweb/Documents/catprinter/app/gpt && ./gpt.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
