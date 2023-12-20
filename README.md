@@ -30,7 +30,7 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 > `@reboot cd /home/yourpath/ && ./start_catprinterbot.sh`
 
 ### To have a log server in PHP, you can add this code in a .php file to install later for Apache or Nginx:
-```
+``` php
 <?php
 
 $log = file_get_contents('/chemin/vers/fichier.log');
