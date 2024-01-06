@@ -1,10 +1,11 @@
-python-telegram-bot
-bleak
-requests
-beautifulsoup4
-qrcode
+python-telegram-bot==13.15
+bleak==0.12.1
+pillow==8.3.1
+requests==2.26.0
+beautifulsoup4==4.11.2
+qrcode==7.3
 bitcoin==1.1.42
 numpy==1.20.0
 ecdsa==0.16.1
 pysha3==1.0.2
-openai
+openai==1.6.1
