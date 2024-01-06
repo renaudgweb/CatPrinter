@@ -25,7 +25,7 @@ def start(update, context):
 def help(update, context):
     """Send a message when the command /help is issued."""
     os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/help.wav")
-    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\nI take care of the 🖨️ 😽️')
+    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\n🤖️ /dalle <prompt> - to have a image from OpenAI Dall-e to the given prompt.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
@@ -246,7 +246,7 @@ def astro(update, context):
 
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
-        
+
 def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
@@ -319,7 +319,7 @@ def crypto(update, context):
         aave_stp = aave['last_updated_at']
         aave_dt = datetime.fromtimestamp(aave_stp)
         aave_time = aave_dt.strftime("%H:%M:%S")
-        
+
         chsb = cryptos['swissborg']
         chsb_eur = chsb['eur']
         chsb_usd = chsb['usd']
@@ -345,7 +345,7 @@ def BTC_paper_wallet(update, context):
     os.system("cd /home/yourpath/Documents/catprinter/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
-    
+
 def ETH_paper_wallet(update, context):
     """Print a new Ethereum paper wallet when the command /eth is issued"""
     update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
@@ -353,15 +353,26 @@ def ETH_paper_wallet(update, context):
     os.system("cd /home/yourpath/Documents/catprinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
-    
+
 def GPT(update, context):
     """Print the response from GPT-3.5 to the given prompt"""
     update.message.reply_text('🤖️💬️ I print the response... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/rengweb/Musique/bruitages/catprinterbot/message.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/message.wav")
     gpt = update.message.text
     gpt = gpt.replace("/gpt ", "")
-    os.system("cd /home/rengweb/Documents/catprinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
-    os.system("cd /home/rengweb/Documents/catprinter/app/gpt && ./gpt.sh")
+    os.system("cd /home/yourpath/Documents/catprinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
+    os.system("cd /home/yourpath/Documents/catprinter/app/gpt && ./gpt.sh")
+    update.message.reply_text('✅️ Meow! 😻️ /help')
+
+def Dall_e(update, context):
+    """Print the image from Dall-e to the given prompt"""
+    update.message.reply_text('🤖️🖼️ I print the image... 😺️')
+    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/photo.wav")
+    dalle = update.message.text
+    dalle = dalle.replace("/dalle ", "")
+    os.system("cd /home/yourpath/Documents/catprinter/app/dall_e && /usr/local/opt/python-3.9.6/bin/python3.9 dalle.py '" + dalle + "'")
+    os.system("cd /home/yourpath/Documents/catprinter/app/dall_e && ./dalle.sh")
+    update.message.reply_photo(open("/home/your/path/catprinter/app/dall_e/dalle.png", "rb"))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def error(update, context):
@@ -395,6 +406,7 @@ def main():
     dp.add_handler(CommandHandler("eth", ETH_paper_wallet))
     dp.add_handler(CommandHandler("crypto", crypto))
     dp.add_handler(CommandHandler("gpt", GPT))
+    dp.add_handler(CommandHandler("dalle", Dall_e))
 
     dp.add_handler(MessageHandler(Filters.regex('https://') | Filters.regex('http://'), regex))
     dp.add_handler(MessageHandler(Filters.text, text))
