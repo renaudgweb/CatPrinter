@@ -2,6 +2,7 @@
 import logging
 import requests
 import os
+from config.config import HOME_PATH, TELEGRAM_BOT_TOKEN
 from datetime import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -13,23 +14,23 @@ from qrcode.image.styles.colormasks import SquareGradiantColorMask
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = 'YOURTOKEN'
+TOKEN = TELEGRAM_BOT_TOKEN
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/start.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/start.wav")
     update.message.reply_text('🏁️ 😻 MeowwWelcome!\n\nYou can send /help to know what I can do')
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/help.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/help.wav")
     update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\n🤖️ /dalle <prompt> - to have a image from OpenAI Dall-e to the given prompt.\n\nI take care of the 🖨️ 😽️')
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/feed.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/feed.wav")
     update.message.reply_text("⬆️ I roll out some paper... 😺️")
     os.system("curl --location -X POST --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
@@ -37,17 +38,17 @@ def feed(update, context):
 def weather(update, context):
     """Print the airport weather when the command /weather is issued."""
     update.message.reply_text('🛬️🛫️ I print the airport weather... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/weather.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/weather.wav")
     weather = update.message.text
     weather = weather.replace("/weather ", "")
-    os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > /home/yourpath/Documents/catprinter/app/meteo+/weather.txt")
-    os.system("cd /home/yourpath/Documents/catprinter/app/meteo+ && ./weather.sh")
+    os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > " + HOME_PATH + "CatPrinter/app/meteo+/weather.txt")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/meteo+ && ./weather.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def meteo(update, context):
     """Print the city weather when the command /meteo is issued."""
     update.message.reply_text('🌤️ I print the city weather... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/meteo.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/meteo.wav")
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
     r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
@@ -81,14 +82,14 @@ def meteo(update, context):
 
         city = response['name']
 
-        f = open("/home/yourpath/Documents/catprinter/app/meteo+/meteo.txt", "w")
+        f = open(HOME_PATH + "CatPrinter/app/meteo+/meteo.txt", "w")
         f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
         f.close()
 
-        os.system('wget -P /home/yourpath/Documents/catprinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
-        os.system('mv /home/yourpath/Documents/catprinter/app/meteo+/'+icon+'@4x.png /home/yourpath/Documents/catprinter/app/meteo+/icon.png')
-        os.system("cd /home/yourpath/Documents/catprinter/app/meteo+ && ./meteo.sh")
-        os.system("curl --location -X POST --form 'image=@\"/home/yourpath/Documents/catprinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
+        os.system('wget -P ' + HOME_PATH + 'CatPrinter/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
+        os.system('mv ' + HOME_PATH + 'CatPrinter/app/meteo+/'+icon+'@4x.png " + HOME_PATH + "CatPrinter/app/meteo+/icon.png')
+        os.system("cd " + HOME_PATH + "CatPrinter/app/meteo+ && ./meteo.sh")
+        os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "CatPrinter/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
         update.message.reply_text('✅️ Meow! 😻️ /help')
 
     else:
@@ -97,45 +98,45 @@ def meteo(update, context):
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
     update.message.reply_text('🖥️ I print the jobs... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/job.wav")
-    os.system("cd /home/yourpath/Documents/catprinter/app/job && ./job.sh")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/job.wav")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/job && ./job.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def text(update, context):
     """Print the user message."""
     update.message.reply_text("📃️ I print what you wrote... 😺️")
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/message.wav")
-    f = open("/home/yourpath/Documents/catprinter/app/message/message.txt", "w")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/message.wav")
+    f = open(HOME_PATH + "CatPrinter/app/message/message.txt", "w")
     msg = update.message.text
     f.write(msg.replace(";", ","))
     f.close()
-    os.system("cd /home/yourpath/Documents/catprinter/app/message && ./message.sh")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/message && ./message.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def image(update, context):
     """Print the user image."""
     update.message.reply_text("🖼️📷️ I print it right away... 😺️")
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/photo.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/photo.wav")
 
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
-    obj.download(custom_path="/home/yourpath/Documents/catprinter/app/telegram_bot/file.jpg")
+    obj.download(custom_path=HOME_PATH + "CatPrinter/app/telegram_bot/file.jpg")
 
-    os.system("curl --location -X POST --form 'image=@\"/home/yourpath/Documents/catprinter/app/telegram_bot/file.jpg\"' --form 'feed=\"100\"' 'localhost:5000'")
+    os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "CatPrinter/app/telegram_bot/file.jpg\"' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def regex(update, context):
     """Print the user URL."""
     update.message.reply_text('💻️ I print this page right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/url.wav")
-    os.system("wkhtmltoimage --width 384 " + update.message.text + " /home/yourpath/Documents/catprinter/app/web_print/test.png")
-    os.system("curl --location -X POST --form 'image=@/home/yourpath/Documents/catprinter/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/url.wav")
+    os.system("wkhtmltoimage --width 384 " + update.message.text + " " + HOME_PATH + "CatPrinter/app/web_print/test.png")
+    os.system("curl --location -X POST --form 'image=@" + HOME_PATH + "CatPrinter/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def iss(update, context):
     """Return and print the astronauts name when the command /iss is issued."""
     update.message.reply_text('🚀️ I print astronauts names right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/iss.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/iss.wav")
     r = requests.get("http://api.open-notify.org/astros.json")
     astros = r.json()
     people = astros['people']
@@ -152,7 +153,7 @@ def iss(update, context):
 def number(update, context):
     """Return and print the number info when the command /number is issued."""
     update.message.reply_text('🔢️ I print number informations right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/number.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/number.wav")
     number = update.message.text
     number = number.replace("/number ", "")
 
@@ -172,7 +173,7 @@ def number(update, context):
 def geo(update, context):
     """Return and print the address of coordonates when the command /geo is issued."""
     update.message.reply_text('🗺️ I print the address right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/geo.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/geo.wav")
     geo = update.message.text
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
@@ -194,7 +195,7 @@ def geo(update, context):
 def qr(update, context):
     """Return and print the QR Code when the command /qr is issued."""
     update.message.reply_text('🔳️ I print the QR-Code right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/qrcode.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/qrcode.wav")
     code = update.message.text
     code = code.replace("/qr ", "")
     qr = qrcode.QRCode(
@@ -209,17 +210,17 @@ def qr(update, context):
     img_2 = qr.make_image(image_factory=StyledPilImage)
     type(img_1)
     type(img_2)
-    img_1.save("/home/yourpath/Documents/catprinter/app/telegram_bot/qrcode1.png")
-    img_2.save("/home/yourpath/Documents/catprinter/app/telegram_bot/qrcode.png")
-    os.system("curl --location -X POST --form 'image=@\"/home/yourpath/Documents/catprinter/app/telegram_bot/qrcode.png\"' 'localhost:5000'")
+    img_1.save(HOME_PATH + "CatPrinter/app/telegram_bot/qrcode1.png")
+    img_2.save(HOME_PATH + "CatPrinter/app/telegram_bot/qrcode.png")
+    os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "CatPrinter/app/telegram_bot/qrcode.png\"' 'localhost:5000'")
     os.system("curl --location -X POST --form 'text=\"" + code + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_photo(open("/home/yourpath/Documents/catprinter/app/telegram_bot/qrcode1.png", "rb"))
+    update.message.reply_photo(open(HOME_PATH + "CatPrinter/app/telegram_bot/qrcode1.png", "rb"))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def astro(update, context):
     """Print the astro when the command /astro is issued."""
     update.message.reply_text('🌌️ I print the horoscope right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/astro.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/astro.wav")
     sign = update.message.text
     sign = sign.replace("/astro ", "")
     r = requests.post('https://aztro.sameerkumar.website/?sign='+sign+'&day=today')
@@ -237,11 +238,11 @@ def astro(update, context):
         mood = response['mood']
         desc = response['description']
 
-        f = open("/home/yourpath/Documents/catprinter/app/astro/astro.txt", "w")
+        f = open(HOME_PATH + "CatPrinter/app/astro/astro.txt", "w")
         f.write(f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\nLucky time: {lucky_time}\nLucky number: {lucky_num}\nColor: {color}\nMood: {mood}')
         f.close()
 
-        os.system("cd /home/yourpath/Documents/catprinter/app/astro && ./astro.sh")
+        os.system("cd " + HOME_PATH + "CatPrinter/app/astro && ./astro.sh")
         update.message.reply_text('✅️ Meow! 😻️ /help')
 
     else:
@@ -250,7 +251,7 @@ def astro(update, context):
 def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/btc.wav")
     r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token%2Csolana%2Ccardano%2Cterra-luna%2Cavalanche-2%2Cpolkadot%2Caave%2Cswissborg&vs_currencies=eur%2Cusd&include_last_updated_at=true")
 
     if r.status_code == 200:
@@ -341,38 +342,38 @@ def crypto(update, context):
 def BTC_paper_wallet(update, context):
     """Print a new Bitcoin paper wallet when the command /btc is issued"""
     update.message.reply_text('I print the \u20BF paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
-    os.system("cd /home/yourpath/Documents/catprinter/app/btc_paper_wallet && ./btcpaperwallet.sh")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/btc.wav")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 
 def ETH_paper_wallet(update, context):
     """Print a new Ethereum paper wallet when the command /eth is issued"""
     update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/btc.wav")
-    os.system("cd /home/yourpath/Documents/catprinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/btc.wav")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/eth_paper_wallet && ./ethpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 
 def GPT(update, context):
     """Print the response from GPT-3.5 to the given prompt"""
     update.message.reply_text('🤖️💬️ I print the response... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/message.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/message.wav")
     gpt = update.message.text
     gpt = gpt.replace("/gpt ", "")
-    os.system("cd /home/yourpath/Documents/catprinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
-    os.system("cd /home/yourpath/Documents/catprinter/app/gpt && ./gpt.sh")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/gpt && ./gpt.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def Dall_e(update, context):
     """Print the image from Dall-e to the given prompt"""
     update.message.reply_text('🤖️🖼️ I print the image... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q /home/yourpath/Musique/bruitages/catprinterbot/photo.wav")
+    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "CatPrinter/Sound/photo.wav")
     dalle = update.message.text
     dalle = dalle.replace("/dalle ", "")
-    os.system("cd /home/yourpath/Documents/catprinter/app/dall_e && /usr/local/opt/python-3.9.6/bin/python3.9 dalle.py '" + dalle + "'")
-    os.system("cd /home/yourpath/Documents/catprinter/app/dall_e && ./dalle.sh")
-    update.message.reply_photo(open("/home/your/path/catprinter/app/dall_e/dalle.png", "rb"))
+    os.system("cd " + HOME_PATH + "CatPrinter/app/dall_e && /usr/local/opt/python-3.9.6/bin/python3.9 dalle.py '" + dalle + "'")
+    os.system("cd " + HOME_PATH + "CatPrinter/app/dall_e && ./dalle.sh")
+    update.message.reply_photo(open(HOME_PATH + "CatPrinter/app/dall_e/dalle.png", "rb"))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 def error(update, context):

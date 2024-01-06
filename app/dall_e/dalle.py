@@ -1,8 +1,9 @@
+from config.config import HOME_PATH, OPENAI_API_KEY
 from openai import OpenAI
 import sys
 import base64
 
-client = OpenAI(api_key="API-KEY-HERE")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def generate_response(input_text):
@@ -17,7 +18,7 @@ def generate_response(input_text):
     image = response.data[0]
     imgData = base64.b64decode(image.b64_json)
 
-    with open("/home/your/path/catprinter/app/dall_e/dalle.png", 'wb') as f:
+    with open(HOME_PATH + "CatPrinter/app/dall_e/dalle.png", 'wb') as f:
         f.write(imgData)
 
 
