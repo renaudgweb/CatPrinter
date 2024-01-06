@@ -14,7 +14,9 @@ Update the configuration files with your path and API keys:
 
 > app > config > config.sh
 
+
 Add your path up to the location where you have cloned this directory.
+
 (CAUTION: Make sure to add the '/' at the end of your path)
 ---
 Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
