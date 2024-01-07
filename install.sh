@@ -23,9 +23,13 @@ printf "Les paquets APT sont installés ✅️\n"
 # Obtenir le chemin du répertoire actuel
 current_path=$(pwd)
 
-echo "HOME_PATH=\"$current_path\"" >> /app/config/config.py
-echo "HOME_PATH=\"$current_path\"\nexport HOME_PATH" >> /app/config/config.sh
-printf "Les path sont définis ✅️\n"
+
+config_file_py="$current_path/app/config/config.py"
+config_file_sh="$current_path/app/config/config.sh"
+
+echo -e "HOME_PATH=\"$current_path\"\n\nTELEGRAM_BOT_TOKEN=\"TELEGRAM-TOKEN-HERE\"\n\nOPENAI_API_KEY=\"API-KEY-HERE\"" > "$config_file_py"
+echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
+printf "Les chemins sont définis ✅️\n"
 
 # Utilisez la commande find pour rechercher tous les fichiers .sh
 # et appliquer chmod +x à chacun d'eux
