@@ -13,6 +13,8 @@ set -o pipefail
 clear
 cat << "EOF"
 
+Installation script for the catprinter
+
 
 
                          /\_/\ 
@@ -21,7 +23,7 @@ cat << "EOF"
 
 
 
-Installation script for the catprinter
+
 /!\⚠️Be sure to REBOOT after the execution of this script⚠️/!\
 
 EOF
@@ -53,7 +55,8 @@ default_install() {
     printf "Permissions for .sh files have been applied successfully ✔️\n"
 
 
-    current_user=$(whoami)
+    # Obtenir l'utilisateur courrant
+    current_user=$(echo $current_path | cut -d/ -f3)
 
     # Obtient le contenu du crontab de l'utilisateur courant s'il existe, sinon crée un fichier vide
     sudo -u $current_user crontab -l > crontab_temp 2>/dev/null || touch crontab_temp
