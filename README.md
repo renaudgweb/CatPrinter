@@ -3,6 +3,15 @@
 # CatPrinter
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
 
+
+## Install script:
+> `sudo chmod +x install.sh && sudo ./install.sh`
+
+Reboot after the execution of this script
+
+> `sudo reboot`
+
+
 ---
 Update the configuration files with your API keys:
 
@@ -12,8 +21,6 @@ Update the configuration files with your API keys:
 ---
 Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
 
-## Install script:
-> `sudo chmod +x install.sh && sudo ./install.sh`
 
 ### To have a log server in PHP, you can add this code in a .php file to install later for Apache or Nginx:
 ``` php
