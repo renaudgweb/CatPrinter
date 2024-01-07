@@ -1,4 +1,7 @@
-from config.config import HOME_PATH, OPENAI_API_KEY
+import sys
+sys.path.append('../config')
+from config import HOME_PATH, OPENAI_API_KEY
+
 from openai import OpenAI
 import sys
 
@@ -19,6 +22,6 @@ def generate_response(input_text):
 
 user_input = sys.argv[1]
 response = generate_response(user_input)
-f = open(HOME_PATH + "CatPrinter/app/gpt/gpt.txt", "w")
+f = open(HOME_PATH + "/app/gpt/gpt.txt", "w")
 f.write(response.replace(";", ","))
 f.close()

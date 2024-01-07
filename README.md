@@ -8,6 +8,8 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 
 > `apt install wkhtmltopdf`
 
+> `apt install libopenjp2-7`
+
 Update the configuration files with your path and API keys:
 
 > app > config > config.py

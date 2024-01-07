@@ -1,9 +1,7 @@
 <?php
-	function NextcloudTalk_SendMessage($channel_id, $message) {
-		$SERVER = "https://urltoyour/nextcloud/forlder";
-		$USER = "USERNAME";
-		$PASS = "TOKEN";
+include('../config/config.php');
 
+	function NextcloudTalk_SendMessage($channel_id, $message) {
 		// notify hack
 		$data = array(
 			"token" => $channel_id,
