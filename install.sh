@@ -24,8 +24,7 @@ printf "Les paquets APT sont installés ✅️\n"
 current_path=$(pwd)
 
 echo "HOME_PATH=\"$current_path\"" >> /app/config/config.py
-echo "HOME_PATH=\"$current_path\"" >> /app/config/config.sh
-echo "export HOME_PATH" >> /app/config/config.sh
+echo "HOME_PATH=\"$current_path\"\nexport HOME_PATH" >> /app/config/config.sh
 printf "Les path sont définis ✅️\n"
 
 # Utilisez la commande find pour rechercher tous les fichiers .sh
