@@ -3,7 +3,7 @@
 source ../config/config.sh
 
 #/usr/local/opt/python-3.9.6/bin/python3.9 btcpaperwallet.py
-python3.9 btcpaperwallet.py
+python3 btcpaperwallet.py
 
 sed -i 's/.\{30\}/& /g' txt1.txt
 

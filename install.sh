@@ -16,7 +16,7 @@ pip install -r requirements.txt
 printf "Les paquets Pip sont installés ✅️\n"
 
 # Installe pkg
-sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3.9 sed curl
+sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 sed curl
 printf "Les paquets APT sont installés ✅️\n"
 
 
@@ -37,15 +37,17 @@ find "$current_path" -type f -name "*.sh" -exec chmod +x {} \;
 printf "Les droits des fichiers .sh sont appliqués ✅️\n"
 
 
-# Obtient le contenu du crontab
-crontab -l > crontab_temp
+# Obtient le contenu du crontab s'il existe, sinon crée un fichier vide
+crontab -l > crontab_temp 2>/dev/null || touch crontab_temp
 
 # Ajoute les nouvelles lignes
-echo "@reboot cd $current_path && python3 -tt print_server.py" >> crontab_temp
-echo "@reboot sh $current_path/app/monitor/cat_monitor.sh > $current_path/app/monitor/cat_monitor.txt 2>&1" >> crontab_temp
-echo "@reboot cd $current_path/app/telegram_bot && sleep 15 && python3 bot.py > $current_path/app/monitor/start.txt 2>&1" >> crontab_temp
-echo "* * * * * truncate -s 2M  $current_path/app/monitor/start.txt" >> crontab_temp
-echo "* * * * * truncate -s 2M  $current_path/app/monitor/cat_monitor.txt" >> crontab_temp
+{
+  echo "@reboot cd $current_path && python3 -tt print_server.py"
+  echo "@reboot sh $current_path/app/monitor/cat_monitor.sh > $current_path/app/monitor/cat_monitor.txt 2>&1"
+  echo "@reboot cd $current_path/app/telegram_bot && sleep 15 && python3 bot.py > $current_path/app/monitor/start.txt 2>&1"
+  echo "* * * * * truncate -s 2M  $current_path/app/monitor/start.txt"
+  echo "* * * * * truncate -s 2M  $current_path/app/monitor/cat_monitor.txt"
+} >> crontab_temp
 
 # Installe la nouvelle crontab
 crontab crontab_temp
