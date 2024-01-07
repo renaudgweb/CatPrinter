@@ -7,6 +7,8 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 ## Install script:
 > `sudo chmod +x install.sh && sudo ./install.sh`
 
+Choose the Default install' : D
+
 Reboot after the execution of this script
 
 > `sudo reboot`

@@ -29,7 +29,7 @@ Installation script for the catprinter
 EOF
 
 default_install() {
-    printf "default install...\n"
+    printf "Install...\n"
     # Installe Pip requirements
     pip install -r requirements.txt
     printf "Pip packages are installed successfully ✔️\n"
@@ -84,8 +84,6 @@ default_install() {
 
 all_install() {
     default_install;
-
-    printf "and start install\n"
 
     sudo crontab -l > crontab_temp 2>/dev/null || touch crontab_temp
 
