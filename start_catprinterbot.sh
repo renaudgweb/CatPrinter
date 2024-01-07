@@ -2,4 +2,6 @@
 
 sudo systemctl stop openwebrx && sudo systemctl disable openwebrx
 
-sudo aplay -Dhw:0,0 -q Sound/start.wav
+current_path=$(pwd)
+
+sudo aplay -Dhw:0,0 -q "$current_path/Sound/start.wav"
