@@ -8,8 +8,6 @@ Update the configuration files with your API keys:
 
 > app > config > config.py
 
-> app > config > config.sh
-
 > app > config > config.php
 ---
 Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
