@@ -46,7 +46,7 @@ default_install() {
     config_file_py="$current_path/app/config/config.py"
     config_file_sh="$current_path/app/config/config.sh"
 
-    echo -e "HOME_PATH=\"$current_path\"\n\nTELEGRAM_BOT_TOKEN=\"TELEGRAM-TOKEN-HERE\"\n\nOPENAI_API_KEY=\"API-KEY-HERE\"" > "$config_file_py"
+    echo -e "HOME_PATH = \"$current_path\"\n\nTELEGRAM_BOT_TOKEN = \"TELEGRAM-TOKEN-HERE\"\n\nOPENAI_API_KEY = \"API-KEY-HERE\"" > "$config_file_py"
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
     printf "Paths are defined successfully ✔️\n"
 
