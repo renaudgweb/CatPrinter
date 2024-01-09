@@ -150,7 +150,7 @@ echo '          </code>
     echo "$php_web_log" > "/var/www/html/cat/index.php"
     printf "PHP file generated successfully ✔️\n"
     ip_priv=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}')
-    printf "Your logs can be readable at : $ip_priv/cat/ \n"
+    printf "\nYour logs can be readable at : $ip_priv/cat/ \n\n"
 
 }
 
