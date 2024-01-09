@@ -52,8 +52,8 @@ default_install() {
     openweather_api_key="[Openweather_api]\nOPENWEATHER_API_KEY = APIKEY-HERE"
 
     echo -e "# Config file\n\n$home_path" \
-    "\n$telegram_bot_token\n$openai_api_key" \
-    "\n$nextcloud_talk_channel_id\n$openweather_api_key" > "$config_file_ini"
+    "\n\n$telegram_bot_token\n\n$openai_api_key" \
+    "\n\n$nextcloud_talk_channel_id\n\n$openweather_api_key" > "$config_file_ini"
 
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
     printf "Paths are defined successfully ✔️\n"
