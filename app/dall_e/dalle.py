@@ -1,10 +1,14 @@
-import sys
-sys.path.append('../config')
-from config import HOME_PATH, OPENAI_API_KEY
-
 from openai import OpenAI
 import sys
 import base64
+from configparser import ConfigParser
+
+# Load configuration from a file
+config = ConfigParser()
+config.read('../config/config.ini')
+
+OPENAI_API_KEY = config.get('OpenAI_api', 'OPENAI_API_KEY')
+HOME_PATH = config.get('Paths', 'HOME_PATH')
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -21,7 +25,7 @@ def generate_response(input_text):
     image = response.data[0]
     imgData = base64.b64decode(image.b64_json)
 
-    with open(HOME_PATH + "/app/dall_e/dalle.png", 'wb') as f:
+    with open(f'{HOME_PATH}/app/dall_e/dalle.png', 'wb') as f:
         f.write(imgData)
 
 

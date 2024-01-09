@@ -1,64 +1,115 @@
 #!/usr/bin/env python3
 import logging
-import requests
 import os
-
-import sys
-sys.path.append('../config')
-from config import HOME_PATH, TELEGRAM_BOT_TOKEN
-
 from datetime import datetime
+from configparser import ConfigParser
+import requests
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import CircleModuleDrawer
 from qrcode.image.styles.colormasks import SquareGradiantColorMask
+from configparser import ConfigParser
+
+# Load configuration from a file
+config = ConfigParser()
+config.read('../config/config.ini')
+
+TOKEN = config.get('Telegram_api', 'TELEGRAM_BOT_TOKEN')
+HOME_PATH = config.get('Paths', 'HOME_PATH')
+OPENWEATHER_API_KEY = config.get('Openweather_api', 'OPENWEATHER_API_KEY')
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
 logger = logging.getLogger(__name__)
-TOKEN = TELEGRAM_BOT_TOKEN
+
+
+def play_sound(sound_path):
+    """Play sound using aplay."""
+    os.system(f"sudo aplay -D hw:0,0 -c 2 -q {sound_path}")
+
+
+def make_api_request(url):
+    """Make API request and return the JSON response."""
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an HTTPError for bad responses (4xx or 5xx)
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        logger.error(f"API request failed. URL: {url}. Error: {e}")
+        return None
+
+
+def save_text_to_file(file_path, content):
+    """Save text content to a file."""
+    with open(file_path, 'w') as file:
+        file.write(content)
+
+
+def send_image_to_printer(image_path):
+    """Send image to the printer using curl."""
+    os.system(f'curl --location -X POST --form \'image=@{image_path}\' --form \'feed="100"\'')
+
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/start.wav")
+    play_sound(f"{HOME_PATH}/Sound/start.wav")
     update.message.reply_text('🏁️ 😻 MeowwWelcome!\n\nYou can send /help to know what I can do')
+
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/help.wav")
-    update.message.reply_text('📃️ Write me a message.\n\n🖼️ 📷️ Send me a picture.\n\n💻️ Send me an URL to print web page.\n\n\u20BF /btc - to print a Bitcoin paper wallet.\n\nΞ /eth - to print a Ethereum paper wallet.\n\n📉️📈️ /crypto - to print current prices.\n\n🖥️ /job - to print jobs of the day.\n\n🚀️ /iss - to know peoples in space.\n\n🔳️ /qr <text> - to get & print QR-Code.\n\n🌤️ /meteo <city> - to print weather.\n\n🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n🌌️ /astro <sign> - to print horoscope.\n\n🔢️ /number <1234> - to print some info about it.\n\n🗺️ /geo <45.12345 04.12345> - to print address.\n\n🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\n🤖️ /dalle <prompt> - to have a image from OpenAI Dall-e to the given prompt.\n\nI take care of the 🖨️ 😽️')
+    play_sound(f"{HOME_PATH}/Sound/help.wav")
+    update.message.reply_text(
+        '📃️ Write me a message.\n\n'
+        '🖼️ 📷️ Send me a picture.\n\n'
+        '💻️ Send me an URL to print web page.\n\n'
+        '\u20BF /btc - to print a Bitcoin paper wallet.\n\n'
+        'Ξ /eth - to print a Ethereum paper wallet.\n\n'
+        '📉️📈️ /crypto - to print current prices.\n\n'
+        '🖥️ /job - to print jobs of the day.\n\n'
+        '🚀️ /iss - to know peoples in space.\n\n'
+        '🔳️ /qr <text> - to get & print QR-Code.\n\n'
+        '🌤️ /meteo <city> - to print weather.\n\n'
+        '🛬️🛫️ /weather <ICAO> - to print METAR weather.\n\n'
+        '🌌️ /astro <sign> - to print horoscope.\n\n'
+        '🔢️ /number <1234> - to print some info about it.\n\n'
+        '🗺️ /geo <45.12345 04.12345> - to print address.\n\n'
+        '🤖️ /gpt <prompt> - to have a response from OpenAI GPT-3.5 to the given prompt.\n\n'
+        '🤖️ /dalle <prompt> - to have an image from OpenAI Dall-e to the given prompt.\n\n'
+        'I take care of the 🖨️ 😽️'
+    )
+
 
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/feed.wav")
+    play_sound(f"{HOME_PATH}/Sound/feed.wav")
     update.message.reply_text("⬆️ I roll out some paper... 😺️")
     os.system("curl --location -X POST --form 'feed=\"100\"' 'localhost:5000'")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
+
 def weather(update, context):
     """Print the airport weather when the command /weather is issued."""
     update.message.reply_text('🛬️🛫️ I print the airport weather... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/weather.wav")
+    play_sound(f"{HOME_PATH}/Sound/weather.wav")
     weather = update.message.text
     weather = weather.replace("/weather ", "")
-    os.system("weather " + weather + " -qmv | sed 's/\;/\,/g' > " + HOME_PATH + "/app/meteo+/weather.txt")
-    os.system("cd " + HOME_PATH + "/app/meteo+ && ./weather.sh")
+    os.system(f'weather {weather} -qmv | sed "s/;/,/g" > "{HOME_PATH}/app/meteo+/weather.txt"')
+    os.system("cd {HOMEPATH}/app/meteo+ && ./weather.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def meteo(update, context):
     """Print the city weather when the command /meteo is issued."""
     update.message.reply_text('🌤️ I print the city weather... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/meteo.wav")
+    play_sound(f"{HOME_PATH}/Sound/meteo.wav")
     city_name = update.message.text
     city_name = city_name.replace("/meteo ", "")
-    r = requests.get('https://api.openweathermap.org/data/2.5/weather?q='+city_name+'&lang=fr&units=metric&appid=API-openweather-TOKEN')
+    r = make_api_request(f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&lang=fr&units=metric&appid={OPENWEATHER_API_KEY}')
 
-    if r.status_code == 200:
-
+    if r is not None:
         response = r.json()
 
         desc = response['weather'][0]['description']
@@ -86,120 +137,140 @@ def meteo(update, context):
 
         city = response['name']
 
-        f = open(HOME_PATH + "/app/meteo+/meteo.txt", "w")
-        f.write(f"Ciel: {desc}\nTempérature: {temp}°c\nRessentie: {temp_feels}°c\nMinimale: {temp_min}°c\nMaximale: {temp_max}°c\nPression: {pres}hPa\nHumidité: {hum}%\nVisibilité: {vis}m\nVent: {wind_speed}m/s, {wind_dir}°\nNuages: {clouds}%\nLevé: {sunrise_date}\nCouché: {sunset_date}\n\nVille: {city}\n{date}")
-        f.close()
+        save_text_to_file(
+            f"{HOME_PATH}/app/meteo+/meteo.txt",
+            f"Ciel: {desc}\n"
+            f"Température: {temp}°c\n"
+            f"Ressentie: {temp_feels}°c\n"
+            f"Minimale: {temp_min}°c\n"
+            f"Maximale: {temp_max}°c\n"
+            f"Pression: {pres}hPa\n"
+            f"Humidité: {hum}%\n"
+            f"Visibilité: {vis}m\n"
+            f"Vent: {wind_speed}m/s, {wind_dir}°\n"
+            f"Nuages: {clouds}%\n"
+            f"Levé: {sunrise_date}\n"
+            f"Couché: {sunset_date}\n\n"
+            f"Ville: {city}\n"
+            f"{date}"
+        )
 
-        os.system('wget -P ' + HOME_PATH + '/app/meteo+ https://openweathermap.org/img/wn/'+icon+'@4x.png')
-        os.system('mv ' + HOME_PATH + '/app/meteo+/'+icon+'@4x.png " + HOME_PATH + "/app/meteo+/icon.png')
-        os.system("cd " + HOME_PATH + "/app/meteo+ && ./meteo.sh")
-        os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "/app/meteo+/icon.png\"' --form 'feed=\"100\"' 'localhost:5000'")
+        os.system(f'wget -P {HOME_PATH}/app/meteo+ https://openweathermap.org/img/wn/{icon}@4x.png')
+        os.system(f'mv {HOMEPATH}/app/meteo+/ {icon}@4x.png {HOMEPATH}/app/meteo+/icon.png')
+        os.system(f"cd {HOMEPATH}/app/meteo+ && ./meteo.sh")
+        send_image_to_printer(f"{HOMEPATH}/app/meteo+/icon.png")
         update.message.reply_text('✅️ Meow! 😻️ /help')
-
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
     update.message.reply_text('🖥️ I print the jobs... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/job.wav")
-    os.system("cd " + HOME_PATH + "/app/job && ./job.sh")
+    play_sound(f"{HOME_PATH}/Sound/job.wav")
+    os.system(f"cd {HOMEPATH}/app/job && ./job.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def text(update, context):
     """Print the user message."""
     update.message.reply_text("📃️ I print what you wrote... 😺️")
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/message.wav")
-    f = open(HOME_PATH + "/app/message/message.txt", "w")
+    play_sound(f"{HOME_PATH}/Sound/message.wav")
+    f = open(f"{HOME_PATH}/app/message/message.txt", "w")
     msg = update.message.text
     f.write(msg.replace(";", ","))
     f.close()
-    os.system("cd " + HOME_PATH + "/app/message && ./message.sh")
+    os.system(f"cd {HOMEPATH}/app/message && ./message.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def image(update, context):
     """Print the user image."""
     update.message.reply_text("🖼️📷️ I print it right away... 😺️")
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/photo.wav")
+    play_sound(f"{HOME_PATH}/Sound/photo.wav")
 
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
-    obj.download(custom_path=HOME_PATH + "/app/telegram_bot/file.jpg")
+    obj.download(custom_path=f'{HOME_PATH}/app/telegram_bot/file.jpg')
 
-    os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "/app/telegram_bot/file.jpg\"' --form 'feed=\"100\"' 'localhost:5000'")
+    send_image_to_printer(f"{HOMEPATH}/app/telegram_bot/file.jpg")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def regex(update, context):
     """Print the user URL."""
     update.message.reply_text('💻️ I print this page right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/url.wav")
-    os.system("wkhtmltoimage --width 384 " + update.message.text + " " + HOME_PATH + "/app/web_print/test.png")
-    os.system("curl --location -X POST --form 'image=@" + HOME_PATH + "/app/web_print/test.png' --form 'feed=\"100\"' 'localhost:5000'")
+    play_sound(f"{HOME_PATH}/Sound/url.wav")
+    os.system(f'wkhtmltoimage --width 384 "{update.message.text}" "{HOMEPATH}/app/web_print/test.png"')
+    send_image_to_printer(f"{HOMEPATH}/app/web_print/test.png")
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def iss(update, context):
     """Return and print the astronauts name when the command /iss is issued."""
     update.message.reply_text('🚀️ I print astronauts names right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/iss.wav")
-    r = requests.get("http://api.open-notify.org/astros.json")
-    astros = r.json()
-    people = astros['people']
+    play_sound(f"{HOME_PATH}/Sound/iss.wav")
+    r = make_api_request("http://api.open-notify.org/astros.json")
+    if r is not None:
+        astros = r  # No need for r.json() since make_api_request already handles it
+        people = astros['people']
 
-    people_in_space = []
-    for d in people:
-        people_in_space.append(d['name']+" (")
-        people_in_space.append(d['craft']+")\n")
+        people_in_space = []
+        for d in people:
+            people_in_space.append(f'{d["name"]} ({d["craft"]})\n')
 
-    iss_info =  f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
-    os.system("curl --location -X POST --form 'text=\"" + iss_info[:-1] + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_text('✅️ Meow! 😻️ /help')
+        iss_info = f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
+        os.system(f'curl --location -X POST --form \'text="{iss_info[:-1]}"\' --form \'feed="100"\' \'localhost:5000\'')
+        update.message.reply_text('✅️ Meow! 😻️ /help')
+    else:
+        # Handle the case where the API request fails
+        update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def number(update, context):
     """Return and print the number info when the command /number is issued."""
     update.message.reply_text('🔢️ I print number informations right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/number.wav")
+    play_sound(f"{HOME_PATH}/Sound/number.wav")
     number = update.message.text
     number = number.replace("/number ", "")
 
-    r = requests.get('http://numbersapi.com/'+number+'/trivia?json')
+    r = make_api_request(f'http://numbersapi.com/{number}/trivia?json')
 
-    if r.status_code == 200:
-
+    if r is not None:
         response = r.json()
         number_res = response['text']
 
-        os.system("curl --location -X POST --form 'text=\"" + number_res + "\"' --form 'font=\"ocr_b.ttf\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        os.system(f'curl --location -X POST --form \'text="{number_res}"\' --form \'feed="100"\' \'localhost:5000\'')
         update.message.reply_text('✅️ Meow! 😻️ /help')
-
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def geo(update, context):
     """Return and print the address of coordonates when the command /geo is issued."""
     update.message.reply_text('🗺️ I print the address right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/geo.wav")
+    play_sound(f"{HOME_PATH}/Sound/geo.wav")
     geo = update.message.text
     geo = geo.replace("/geo ", "")
     lat = geo[0:8]
     lon = geo[9:21]
 
-    r = requests.get('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+    r = make_api_request(f'https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json')
 
-    if r.status_code == 200:
-
+    if r is not None:
         response = r.json()
         location = response['display_name']
 
-        os.system("curl --location -X POST --form 'text=\"" + location + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        os.system(f'curl --location -X POST --form \'text="{location}"\' --form \'size="24"\' --form \'feed="100"\' \'localhost:5000\'')
         update.message.reply_text('✅️ Meow! 😻️ /help')
-
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def qr(update, context):
     """Return and print the QR Code when the command /qr is issued."""
     update.message.reply_text('🔳️ I print the QR-Code right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/qrcode.wav")
+    play_sound(f"{HOME_PATH}/Sound/qrcode.wav")
     code = update.message.text
     code = code.replace("/qr ", "")
     qr = qrcode.QRCode(
@@ -210,27 +281,33 @@ def qr(update, context):
     )
     qr.add_data(code)
 
-    img_1 = qr.make_image(back_color=(255, 195, 235), fill_color=(55, 95, 35), image_factory=StyledPilImage, module_drawer=CircleModuleDrawer(), color_mask=SquareGradiantColorMask())
+    img_1 = qr.make_image(
+        back_color=(255, 195, 235),
+        fill_color=(55, 95, 35),
+        image_factory=StyledPilImage,
+        module_drawer=CircleModuleDrawer(),
+        color_mask=SquareGradiantColorMask()
+    )
     img_2 = qr.make_image(image_factory=StyledPilImage)
     type(img_1)
     type(img_2)
-    img_1.save(HOME_PATH + "/app/telegram_bot/qrcode1.png")
-    img_2.save(HOME_PATH + "/app/telegram_bot/qrcode.png")
-    os.system("curl --location -X POST --form 'image=@\"" + HOME_PATH + "/app/telegram_bot/qrcode.png\"' 'localhost:5000'")
-    os.system("curl --location -X POST --form 'text=\"" + code + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
-    update.message.reply_photo(open(HOME_PATH + "/app/telegram_bot/qrcode1.png", "rb"))
+    img_1.save(f'{HOME_PATH}/app/telegram_bot/qrcode1.png')
+    img_2.save(f'{HOME_PATH}/app/telegram_bot/qrcode.png')
+    send_image_to_printer(f"{HOMEPATH}/app/telegram_bot/qrcode.png")
+    os.system(f'curl --location -X POST --form \'text="{code}"\' --form \'size="24"\' --form \'feed="100"\' \'localhost:5000\'')
+    update.message.reply_photo(open(f'{HOME_PATH}/app/telegram_bot/qrcode1.png', 'rb'))
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def astro(update, context):
     """Print the astro when the command /astro is issued."""
     update.message.reply_text('🌌️ I print the horoscope right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/astro.wav")
+    play_sound(f"{HOME_PATH}/Sound/astro.wav")
     sign = update.message.text
     sign = sign.replace("/astro ", "")
-    r = requests.post('https://aztro.sameerkumar.website/?sign='+sign+'&day=today')
+    r = requests.post(f'https://aztro.sameerkumar.website/?sign={sign}&day=today')
 
-    if r.status_code == 200:
-
+    if r is not None:
         response = r.json()
 
         dt = response['current_date']
@@ -242,24 +319,34 @@ def astro(update, context):
         mood = response['mood']
         desc = response['description']
 
-        f = open(HOME_PATH + "/app/astro/astro.txt", "w")
-        f.write(f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\nLucky time: {lucky_time}\nLucky number: {lucky_num}\nColor: {color}\nMood: {mood}')
-        f.close()
+        save_text_to_file(
+            f'{HOME_PATH}/app/astro/astro.txt',
+            (f'{dt}\n\n"{desc}"\n\n{dt_range}\nCompatibility: {compat}\n'
+             f'Lucky time: {lucky_time}\nLucky number: {lucky_num}\n'
+             f'Color: {color}\nMood: {mood}')
+        )
 
-        os.system("cd " + HOME_PATH + "/app/astro && ./astro.sh")
+        os.system(f'cd {HOME_PATH}/app/astro && ./astro.sh')
         update.message.reply_text('✅️ Meow! 😻️ /help')
 
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
 
+
 def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/btc.wav")
-    r = requests.get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cbasic-attention-token%2Csolana%2Ccardano%2Cterra-luna%2Cavalanche-2%2Cpolkadot%2Caave%2Cswissborg&vs_currencies=eur%2Cusd&include_last_updated_at=true")
+    play_sound(f"{HOME_PATH}/Sound/btc.wav")
+    r = make_api_request(
+        "https://api.coingecko.com/api/v3/simple/price",
+        params={
+            'ids': 'bitcoin,ethereum,basic-attention-token,solana,cardano,terra-luna,avalanche-2,polkadot,aave,swissborg',
+            'vs_currencies': 'eur,usd',
+            'include_last_updated_at': 'true'
+        }
+    )
 
-    if r.status_code == 200:
-
+    if r is not None:
         cryptos = r.json()
 
         btc = cryptos['bitcoin']
@@ -334,56 +421,83 @@ def crypto(update, context):
 
         dt = datetime.fromtimestamp(btc_stp)
         date = dt.strftime("%d/%m/%y")
-        crypto_info =  f"Coingecko.com {date}\n\n--------------------\nBitcoin (BTC):\n{btc_eur} EUR\n{btc_usd} USD\n{btc_time}\n--------------------\nEthereum (ETH):\n{eth_eur} EUR\n{eth_usd} USD\n{eth_time}\n--------------------\nBasic Attention Token (BAT):\n{bat_eur} EUR\n{bat_usd} USD\n{bat_time}\n--------------------\nSolana (SOL):\n{sol_eur} EUR\n{sol_usd} USD\n{sol_time}\n--------------------\nCardano (ADA):\n{ada_eur} EUR\n{ada_usd} USD\n{ada_time}\n--------------------\nTerra-Luna (LUNA):\n{luna_eur} EUR\n{luna_usd} USD\n{luna_time}\n--------------------\nAvalanche (AVAX):\n{avax_eur} EUR\n{avax_usd} USD\n{avax_time}\n--------------------\nPolkadot (DOT):\n{dot_eur} EUR\n{dot_usd} USD\n{dot_time}\n--------------------\nAave (AAVE):\n{aave_eur} EUR\n{aave_usd} USD\n{aave_time}\n--------------------\nSwissBorg (CHSB):\n{chsb_eur} EUR\n{chsb_usd} USD\n{chsb_time}\n--------------------"
+        crypto_info = (
+            f"Coingecko.com {date}\n\n--------------------\n"
+            f"Bitcoin (BTC):\n{btc_eur} EUR\n{btc_usd} USD\n{btc_time}\n"
+            f"--------------------\n"
+            f"Ethereum (ETH):\n{eth_eur} EUR\n{eth_usd} USD\n{eth_time}\n"
+            f"--------------------\n"
+            f"Basic Attention Token (BAT):\n{bat_eur} EUR\n{bat_usd} USD\n{bat_time}\n"
+            f"--------------------\n"
+            f"Solana (SOL):\n{sol_eur} EUR\n{sol_usd} USD\n{sol_time}\n"
+            f"--------------------\n"
+            f"Cardano (ADA):\n{ada_eur} EUR\n{ada_usd} USD\n{ada_time}\n"
+            f"--------------------\n"
+            f"Terra-Luna (LUNA):\n{luna_eur} EUR\n{luna_usd} USD\n{luna_time}\n"
+            f"--------------------\n"
+            f"Avalanche (AVAX):\n{avax_eur} EUR\n{avax_usd} USD\n{avax_time}\n"
+            f"--------------------\n"
+            f"Polkadot (DOT):\n{dot_eur} EUR\n{dot_usd} USD\n{dot_time}\n"
+            f"--------------------\n"
+            f"Aave (AAVE):\n{aave_eur} EUR\n{aave_usd} USD\n{aave_time}\n"
+            f"--------------------\n"
+            f"SwissBorg (CHSB):\n{chsb_eur} EUR\n{chsb_usd} USD\n{chsb_time}\n"
+            f"--------------------"
+        )
 
-        os.system("curl --location -X POST --form 'text=\"" + crypto_info + "\"' --form 'size=\"24\"' --form 'feed=\"100\"' 'localhost:5000'")
+        os.system(f'curl --location -X POST --form \'text="{crypto_info}"\' --form \'size="24"\' --form \'feed="100"\' \'localhost:5000\'')
         update.message.reply_text('✅️ Meow! 😻️ /help')
         update.message.reply_text('🚀️🌙️ TO THE MOON ! 😻️')
-
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def BTC_paper_wallet(update, context):
     """Print a new Bitcoin paper wallet when the command /btc is issued"""
     update.message.reply_text('I print the \u20BF paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/btc.wav")
-    os.system("cd " + HOME_PATH + "/app/btc_paper_wallet && ./btcpaperwallet.sh")
+    play_sound(f"{HOME_PATH}/Sound/btc.wav")
+    os.system(f"cd {HOMEPATH}/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
+
 
 def ETH_paper_wallet(update, context):
     """Print a new Ethereum paper wallet when the command /eth is issued"""
     update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/btc.wav")
-    os.system("cd " + HOME_PATH + "/app/eth_paper_wallet && ./ethpaperwallet.sh")
+    play_sound(f"{HOME_PATH}/Sound/btc.wav")
+    os.system(f"cd {HOMEPATH}/app/eth_paper_wallet && ./ethpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
+
 
 def GPT(update, context):
     """Print the response from GPT-3.5 to the given prompt"""
     update.message.reply_text('🤖️💬️ I print the response... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/message.wav")
+    play_sound(f"{HOME_PATH}/Sound/message.wav")
     gpt = update.message.text
     gpt = gpt.replace("/gpt ", "")
-    os.system("cd " + HOME_PATH + "/app/gpt && /usr/local/opt/python-3.9.6/bin/python3.9 gpt.py '" + gpt + "'")
-    os.system("cd " + HOME_PATH + "/app/gpt && ./gpt.sh")
+    os.system(f'cd "{HOME_PATH}/app/gpt" && python3 gpt.py "{gpt}"')
+    os.system(f'cd "{HOME_PATH}/app/gpt" && ./gpt.sh')
     update.message.reply_text('✅️ Meow! 😻️ /help')
+
 
 def Dall_e(update, context):
     """Print the image from Dall-e to the given prompt"""
     update.message.reply_text('🤖️🖼️ I print the image... 😺️')
-    os.system("sudo aplay -D hw:0,0 -c 2 -q " + HOME_PATH + "/Sound/photo.wav")
+    play_sound(f"{HOME_PATH}/Sound/photo.wav")
     dalle = update.message.text
     dalle = dalle.replace("/dalle ", "")
-    os.system("cd " + HOME_PATH + "/app/dall_e && /usr/local/opt/python-3.9.6/bin/python3.9 dalle.py '" + dalle + "'")
-    os.system("cd " + HOME_PATH + "/app/dall_e && ./dalle.sh")
+    os.system(f'cd "{HOME_PATH}/app/dall_e" && python3 dalle.py "{dalle}"')
+    os.system(f'cd "{HOME_PATH}/app/dall_e" && ./dalle.sh')
     update.message.reply_photo(open(HOME_PATH + "/app/dall_e/dalle.png", "rb"))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
+
 def error(update, context):
     """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+    logger.warning(f'Erreur lors de la mise à jour de "{update}". Erreur rencontrée : "{context.error}"')
     update.message.reply_text('❌️ Meow? 😼️ /help')
+
 
 def main():
     """Start the bot."""
@@ -391,7 +505,6 @@ def main():
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
     updater = Updater(TOKEN, use_context=True)
-
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
@@ -427,6 +540,7 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+
 
 if __name__ == '__main__':
     main()

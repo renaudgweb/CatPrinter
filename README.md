@@ -7,10 +7,12 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 ## Install script:
 > `sudo chmod +x install.sh && sudo ./install.sh`
 
-Choose the Default install : "D" for normal installation
+Choose the Default install : [D] for normal installation
 
-After, you can choose the Web install : "W" for the PHP web log file
+After, you can choose the Web install : [W] for the PHP web log file
 (installed in /var/www/html/cat/index.php)
+
+(Start install or [S] is for my personal use case)
 
 Reboot after the execution of this script
 
@@ -18,9 +20,18 @@ Reboot after the execution of this script
 
 
 ---
-Update the configuration files with your API keys:
+You can, if you have Nextcloud Talk app, add a *channel_id* to have a monitoring bot for the status of the catprinter, to be specified in the configuration files.
+For this, opens the discussion where you want your bot to send you notifications via the Nextcloud Talk web application.
+Retrieve the channel ID at the end of the discussion URL.
+For example, in the following link:
+https://your-nextcloud-instance/index.php/call/ybz3dgu#/
+The channel ID is: *ybz3dgu*
 
-> app > config > config.py
+**You need API keys from : Telegram Bot, OpenWeather and OpenAI**
+
+Update the configuration files with your API keys in :
+
+> app > config > config.ini
 
 > app > config > config.php
 ---
@@ -36,7 +47,7 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 > `curl --location -X POST --form 'image=@/home/your/path/catprinter/test.png' --form 'feed="100"' 'localhost:5000'`
 
 ## Send text:
-> `curl --location -X POST --form 'text="Lorem ipsum."' --form 'feed="100"' 'localhost:5000'`
+> `curl --location -X POST --form 'text="Lorem ipsum."' --form 'font="Peignot.ttf"' --form 'size="48"' --form 'feed="100"' 'localhost:5000'`
 
 ## Feed paper:
 > `curl --location --request POST --form 'feed="100"' 'localhost:5000'`

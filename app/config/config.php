@@ -1,7 +1,7 @@
 <?php
 
-$SERVER = "https://urltoyour/nextcloud/forlder";
+$SERVER = "https://urltoyour/nextcloud/instance";
 $USER = "USERNAME";
-$PASS = "TOKEN";
+$PASS = "PASSWORD";
 
 ?>

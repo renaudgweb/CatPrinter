@@ -38,14 +38,21 @@ default_install() {
     printf "Pip packages are installed successfully ✔️\n"
 
     # Installe pkg
-    sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 sed curl
+    sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 sed curl weather-util
     printf "APT packages are installed successfully ✔️\n"
 
 
-    config_file_py="$current_path/app/config/config.py"
+    config_file_ini="$current_path/app/config/config.ini"
     config_file_sh="$current_path/app/config/config.sh"
 
-    echo -e "HOME_PATH = \"$current_path\"\n\nTELEGRAM_BOT_TOKEN = \"TOKEN-HERE\"\n\nOPENAI_API_KEY = \"APIKEY-HERE\"\n\nNEXTCLOUD_TALK_TOKEN = \"TOKEN-HERE\"" > "$config_file_py"
+    home_path="[Paths]\nHOME_PATH = $current_path"
+    telegram_bot_token="[Telegram_api]\nTELEGRAM_BOT_TOKEN = TOKEN-HERE"
+    openai_api_key="[OpenAI_api]\nOPENAI_API_KEY = APIKEY-HERE"
+    nextcloud_talk_channel_id="[Nextcloud_Talk_api]\nNEXTCLOUD_TALK_CHANNEL_ID = CHANNEL-ID-HERE"
+    openweather_api_key="[Openweather_api]\nOPENWEATHER_API_KEY = APIKEY-HERE"
+
+    echo "# Config file\n\n" > "$config_file_ini"
+    echo -e "$home_path\n\n$telegram_bot_token\n\n$openai_api_key\n\n$nextcloud_talk_channel_id\n\n$openweather_api_key\n" > "$config_file_ini"
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
     printf "Paths are defined successfully ✔️\n"
 

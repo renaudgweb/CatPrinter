@@ -1,9 +1,13 @@
-import sys
-sys.path.append('../config')
-from config import HOME_PATH, OPENAI_API_KEY
-
 from openai import OpenAI
 import sys
+from configparser import ConfigParser
+
+# Load configuration from a file
+config = ConfigParser()
+config.read('../config/config.ini')
+
+OPENAI_API_KEY = config.get('OpenAI_api', 'OPENAI_API_KEY')
+HOME_PATH = config.get('Paths', 'HOME_PATH')
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -22,6 +26,6 @@ def generate_response(input_text):
 
 user_input = sys.argv[1]
 response = generate_response(user_input)
-f = open(HOME_PATH + "/app/gpt/gpt.txt", "w")
+f = open(f'{HOME_PATH}/app/gpt/gpt.txt', 'w')
 f.write(response.replace(";", ","))
 f.close()
