@@ -47,7 +47,13 @@ def save_text_to_file(file_path, content):
 
 def send_image_to_printer(image_path):
     """Send image to the printer using curl."""
-    os.system(f'curl --location -X POST --form \'image=@{image_path}\' --form \'feed="100"\'')
+    try:
+        os.system(f"curl --location -X POST --form 'image=@\"{image_path}\"' 'localhost:5000'")
+        print('Image successfully sent to the printer!')
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print('Failed to send image to the printer.')
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -97,7 +103,7 @@ def weather(update, context):
     weather = update.message.text
     weather = weather.replace("/weather ", "")
     os.system(f'weather {weather} -qmv | sed "s/;/,/g" > "{HOME_PATH}/app/meteo+/weather.txt"')
-    os.system("cd {HOMEPATH}/app/meteo+ && ./weather.sh")
+    os.system(f"cd {HOME_PATH}/app/meteo+ && ./weather.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 
@@ -110,7 +116,7 @@ def meteo(update, context):
     r = make_api_request(f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&lang=fr&units=metric&appid={OPENWEATHER_API_KEY}')
 
     if r is not None:
-        response = r.json()
+        response = r
 
         desc = response['weather'][0]['description']
         icon = response['weather'][0]['icon']
@@ -156,9 +162,9 @@ def meteo(update, context):
         )
 
         os.system(f'wget -P {HOME_PATH}/app/meteo+ https://openweathermap.org/img/wn/{icon}@4x.png')
-        os.system(f'mv {HOMEPATH}/app/meteo+/ {icon}@4x.png {HOMEPATH}/app/meteo+/icon.png')
-        os.system(f"cd {HOMEPATH}/app/meteo+ && ./meteo.sh")
-        send_image_to_printer(f"{HOMEPATH}/app/meteo+/icon.png")
+        os.system(f'mv {HOME_PATH}/app/meteo+/{icon}@4x.png {HOME_PATH}/app/meteo+/icon.png')
+        os.system(f"cd {HOME_PATH}/app/meteo+ && ./meteo.sh")
+        send_image_to_printer(f"{HOME_PATH}/app/meteo+/icon.png")
         update.message.reply_text('✅️ Meow! 😻️ /help')
     else:
         update.message.reply_text('❌️ Meow? 😼️ /help')
@@ -168,7 +174,7 @@ def job(update, context):
     """Send a message and print the jobs when the command /meteo is issued."""
     update.message.reply_text('🖥️ I print the jobs... 😺️')
     play_sound(f"{HOME_PATH}/Sound/job.wav")
-    os.system(f"cd {HOMEPATH}/app/job && ./job.sh")
+    os.system(f"cd {HOME_PATH}/app/job && ./job.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 
@@ -180,7 +186,7 @@ def text(update, context):
     msg = update.message.text
     f.write(msg.replace(";", ","))
     f.close()
-    os.system(f"cd {HOMEPATH}/app/message && ./message.sh")
+    os.system(f"cd {HOME_PATH}/app/message && ./message.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 
@@ -193,7 +199,7 @@ def image(update, context):
     obj = context.bot.get_file(file)
     obj.download(custom_path=f'{HOME_PATH}/app/telegram_bot/file.jpg')
 
-    send_image_to_printer(f"{HOMEPATH}/app/telegram_bot/file.jpg")
+    send_image_to_printer(f"{HOME_PATH}/app/telegram_bot/file.jpg")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 
@@ -201,8 +207,8 @@ def regex(update, context):
     """Print the user URL."""
     update.message.reply_text('💻️ I print this page right away... 😺️')
     play_sound(f"{HOME_PATH}/Sound/url.wav")
-    os.system(f'wkhtmltoimage --width 384 "{update.message.text}" "{HOMEPATH}/app/web_print/test.png"')
-    send_image_to_printer(f"{HOMEPATH}/app/web_print/test.png")
+    os.system(f'wkhtmltoimage --width 384 "{update.message.text}" "{HOME_PATH}/app/web_print/test.png"')
+    send_image_to_printer(f"{HOME_PATH}/app/web_print/test.png")
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
 
@@ -212,18 +218,18 @@ def iss(update, context):
     play_sound(f"{HOME_PATH}/Sound/iss.wav")
     r = make_api_request("http://api.open-notify.org/astros.json")
     if r is not None:
-        astros = r  # No need for r.json() since make_api_request already handles it
+        astros = r
         people = astros['people']
 
         people_in_space = []
         for d in people:
             people_in_space.append(f'{d["name"]} ({d["craft"]})\n')
 
-        iss_info = f"There are currently {astros['number']} astronauts in orbit:\n{''.join(people_in_space)}."
-        os.system(f'curl --location -X POST --form \'text="{iss_info[:-1]}"\' --form \'feed="100"\' \'localhost:5000\'')
+        iss_info = "There are currently {} astronauts in orbit:\n{}.".format(astros['number'], ''.join(people_in_space))
+        payload = {'text': iss_info[:-1], 'size': '24', 'feed': '100'}
+        requests.post('http://localhost:5000', data=payload)
         update.message.reply_text('✅️ Meow! 😻️ /help')
     else:
-        # Handle the case where the API request fails
         update.message.reply_text('❌️ Meow? 😼️ /help')
 
 
@@ -237,8 +243,7 @@ def number(update, context):
     r = make_api_request(f'http://numbersapi.com/{number}/trivia?json')
 
     if r is not None:
-        response = r.json()
-        number_res = response['text']
+        number_res = r['text']
 
         os.system(f'curl --location -X POST --form \'text="{number_res}"\' --form \'feed="100"\' \'localhost:5000\'')
         update.message.reply_text('✅️ Meow! 😻️ /help')
@@ -258,8 +263,7 @@ def geo(update, context):
     r = make_api_request(f'https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json')
 
     if r is not None:
-        response = r.json()
-        location = response['display_name']
+        location = r['display_name']
 
         os.system(f'curl --location -X POST --form \'text="{location}"\' --form \'size="24"\' --form \'feed="100"\' \'localhost:5000\'')
         update.message.reply_text('✅️ Meow! 😻️ /help')
@@ -293,8 +297,8 @@ def qr(update, context):
     type(img_2)
     img_1.save(f'{HOME_PATH}/app/telegram_bot/qrcode1.png')
     img_2.save(f'{HOME_PATH}/app/telegram_bot/qrcode.png')
-    send_image_to_printer(f"{HOMEPATH}/app/telegram_bot/qrcode.png")
-    os.system(f'curl --location -X POST --form \'text="{code}"\' --form \'size="24"\' --form \'feed="100"\' \'localhost:5000\'')
+    send_image_to_printer(f"{HOME_PATH}/app/telegram_bot/qrcode.png")
+    os.system(f'curl --location -X POST --form "text={code}" --form "size=24" --form "feed=100" "localhost:5000"')
     update.message.reply_photo(open(f'{HOME_PATH}/app/telegram_bot/qrcode1.png', 'rb'))
     update.message.reply_text('✅️ Meow! 😻️ /help')
 
@@ -308,7 +312,7 @@ def astro(update, context):
     r = requests.post(f'https://aztro.sameerkumar.website/?sign={sign}&day=today')
 
     if r is not None:
-        response = r.json()
+        response = r
 
         dt = response['current_date']
         compat = response['compatibility']
@@ -337,7 +341,7 @@ def crypto(update, context):
     """Return and print the crypto prices when the command /crypto is issued."""
     update.message.reply_text('📉️📈️ I print current prices right away... 😺️')
     play_sound(f"{HOME_PATH}/Sound/btc.wav")
-    r = make_api_request(
+    r = requests.get(
         "https://api.coingecko.com/api/v3/simple/price",
         params={
             'ids': 'bitcoin,ethereum,basic-attention-token,solana,cardano,terra-luna,avalanche-2,polkadot,aave,swissborg',
@@ -346,7 +350,7 @@ def crypto(update, context):
         }
     )
 
-    if r is not None:
+    if r.status_code == 200:
         cryptos = r.json()
 
         btc = cryptos['bitcoin']
@@ -456,7 +460,7 @@ def BTC_paper_wallet(update, context):
     """Print a new Bitcoin paper wallet when the command /btc is issued"""
     update.message.reply_text('I print the \u20BF paper wallet right away... 😺️')
     play_sound(f"{HOME_PATH}/Sound/btc.wav")
-    os.system(f"cd {HOMEPATH}/app/btc_paper_wallet && ./btcpaperwallet.sh")
+    os.system(f"cd {HOME_PATH}/app/btc_paper_wallet && ./btcpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 
@@ -465,7 +469,7 @@ def ETH_paper_wallet(update, context):
     """Print a new Ethereum paper wallet when the command /eth is issued"""
     update.message.reply_text('I print the Ξ paper wallet right away... 😺️')
     play_sound(f"{HOME_PATH}/Sound/btc.wav")
-    os.system(f"cd {HOMEPATH}/app/eth_paper_wallet && ./ethpaperwallet.sh")
+    os.system(f"cd {HOME_PATH}/app/eth_paper_wallet && ./ethpaperwallet.sh")
     update.message.reply_text('✅️ Meow! 😻️ /help')
     update.message.reply_text('⚠️⚠️ DO NOT LOSE OR SHARE YOUR PRIVATE KEY ! ⚠️⚠️')
 

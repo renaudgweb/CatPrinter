@@ -3,8 +3,16 @@ import os
 import requests
 import bs4
 from bs4 import BeautifulSoup
+from configparser import ConfigParser
 
-requete = requests.get('https://fr.indeed.com/jobs?q=YOURJOBNAME&l=YOURCITYNAME')
+# Load configuration from a file
+config = ConfigParser()
+config.read('../config/config.ini')
+
+INDEED_JOB_NAME = config.get('Indeed_job_name', 'INDEED_JOB_NAME')
+INDEED_CITY_NAME = config.get('Indeed_city_name', 'INDEED_CITY_NAME')
+
+requete = requests.get(f'https://fr.indeed.com/jobs?q={INDEED_JOB_NAME}&l={INDEED_CITY_NAME}')
 page = requete.content
 soup = BeautifulSoup(page, 'html.parser')
 

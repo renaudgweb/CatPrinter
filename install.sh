@@ -50,10 +50,13 @@ default_install() {
     openai_api_key="[OpenAI_api]\nOPENAI_API_KEY = APIKEY-HERE"
     nextcloud_talk_channel_id="[Nextcloud_Talk_api]\nNEXTCLOUD_TALK_CHANNEL_ID = CHANNEL-ID-HERE"
     openweather_api_key="[Openweather_api]\nOPENWEATHER_API_KEY = APIKEY-HERE"
+    indeed_job_name="[Indeed_job_name]\nINDEED_JOB_NAME = JOB-HERE"
+    indeed_city_name="[Indeed_city_name]\nINDEED_CITY_NAME = CITY-HERE"
 
     echo -e "# Config file\n\n$home_path" \
     "\n\n$telegram_bot_token\n\n$openai_api_key" \
-    "\n\n$nextcloud_talk_channel_id\n\n$openweather_api_key" > "$config_file_ini"
+    "\n\n$nextcloud_talk_channel_id\n\n$openweather_api_key" \
+    "\n\n$indeed_job_name\n$indeed_city_name" > "$config_file_ini"
 
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
     printf "Paths are defined successfully ✔️\n"
