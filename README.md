@@ -24,10 +24,14 @@ You can, if you have Nextcloud Talk app, add a *channel_id* to have a monitoring
 For this, opens the discussion where you want your bot to send you notifications via the Nextcloud Talk web application.
 Retrieve the channel ID at the end of the discussion URL.
 For example, in the following link:
-https://your-nextcloud-instance/index.php/call/ybz3dgu#/
+
+> https://your-nextcloud-instance/index.php/call/ybz3dgu#/
+
 The channel ID is: *ybz3dgu*
 
+
 **You need API keys from : Telegram Bot, OpenWeather and OpenAI**
+
 
 Update the configuration files with your API keys in :
 
