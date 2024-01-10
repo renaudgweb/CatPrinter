@@ -1,10 +1,8 @@
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
-import numpy
 from ecdsa import SigningKey, SECP256k1
 import sha3
-import random
-import os
+
 
 def checksum_encode(addr_str):  # Takes a hex (string) address as input
     keccak = sha3.keccak_256()
@@ -18,6 +16,7 @@ def checksum_encode(addr_str):  # Takes a hex (string) address as input
         else:
             out += c
     return '0x' + out
+
 
 # Generating new wallet
 keccak = sha3.keccak_256()
@@ -50,6 +49,6 @@ qr.add_data(privstr)
 img2 = qr.make_image(image_factory=StyledPilImage)
 img2.save("privatekey-qrcode.png")
 
-qr.add_data('https://etherscan.io/address/'+addrstr)
+qr.add_data(f'https://etherscan.io/address/{addrstr}')
 img3 = qr.make_image(image_factory=StyledPilImage)
 img3.save("balancekey-qrcode.png")

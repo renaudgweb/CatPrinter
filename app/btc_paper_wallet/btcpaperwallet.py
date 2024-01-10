@@ -3,27 +3,26 @@ import qrcode
 from qrcode.image.styledpil import StyledPilImage
 import string
 import random
-import os
 
 # spaces = "----------------------------------------------"
 letters = string.ascii_letters + string.digits + string.ascii_lowercase + string.punctuation
 crypto =  ''.join(random.choice(letters) for i in range(10000))
 
-#PrivateKey
+# PrivateKey
 # print(spaces)
 # key1 = "PrivateKey"
 # print(key1)
-priv = sha256 (crypto)
+priv = sha256(crypto)
 # print(priv)
 f = open("txt1.txt", "w")
 f.write(str(priv))
 f.close()
 # print(spaces)
 
-#PublicKey
+# PublicKey
 pub = privtopub(priv)
 
-#WalletAdress
+# WalletAdress
 # key3 = ("WalletAdress")
 # print(key3)
 addr = pubtoaddr(pub)
@@ -33,7 +32,7 @@ f.write(str(addr))
 f.close()
 # print(spaces)
 
-#QRCode generation
+# QRCode generation
 qr = qrcode.QRCode(
     version=4,
     error_correction=qrcode.constants.ERROR_CORRECT_M,
@@ -48,6 +47,6 @@ qr.add_data(priv)
 img2 = qr.make_image(image_factory=StyledPilImage)
 img2.save("privatekey-qrcode.png")
 
-qr.add_data('https://www.blockchain.com/btc/address/'+addr)
+qr.add_data(f'https://www.blockchain.com/btc/address/{addr}')
 img3 = qr.make_image(image_factory=StyledPilImage)
 img3.save("balancekey-qrcode.png")

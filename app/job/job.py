@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-import os
 import requests
-import bs4
 from bs4 import BeautifulSoup
 from configparser import ConfigParser
 
@@ -18,7 +16,7 @@ soup = BeautifulSoup(page, 'html.parser')
 
 results = soup.find_all("div", class_="slider_container")
 
-f = open('job.txt','w')
+f = open('job.txt', 'w')
 
 for job_element in results:
     title_element = job_element.find("h2", class_="jobTitle")

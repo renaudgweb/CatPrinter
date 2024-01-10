@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 ## Install script
-## Run this with sudo 
+## Run this with sudo !
 #
 # Quitte le programme si une commande échoue
 set -o errexit
@@ -33,12 +33,10 @@ current_path=$(pwd)
 
 default_install() {
     printf "Default Install...\n"
-    # Installe Pip requirements
     pip install -r requirements.txt
     printf "Pip packages are installed successfully ✔️\n"
 
-    # Installe pkg
-    sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 sed curl weather-util
+    sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 alsa-utils sed curl weather-util
     printf "APT packages are installed successfully ✔️\n"
 
 
@@ -73,7 +71,6 @@ default_install() {
     # Obtient le contenu du crontab de l'utilisateur courant s'il existe, sinon crée un fichier vide
     sudo -u $current_user crontab -l > crontab_temp 2>/dev/null || touch crontab_temp
 
-    # Ajoute les nouvelles lignes
     {
       echo "@reboot cd $current_path && python3 -tt print_server.py"
       echo "@reboot sh $current_path/app/monitor/cat_monitor.sh > $current_path/app/monitor/cat_monitor.txt 2>&1"
@@ -100,7 +97,6 @@ start_install() {
 
     echo "@reboot cd $current_path && ./start_catprinterbot.sh" | sudo tee -a crontab_temp
 
-    # Install the new crontab for root user
     if sudo crontab crontab_temp; then
         rm crontab_temp
         printf "Cron with sudo is installed successfully ✔️\n"
@@ -150,7 +146,6 @@ echo '          </code>
 
 ?>"
 
-    # Écriture du contenu dans un fichier PHP
     mkdir /var/www/html/cat/
     echo "$php_web_log" > "/var/www/html/cat/index.php"
     printf "PHP file generated successfully ✔️\n"
