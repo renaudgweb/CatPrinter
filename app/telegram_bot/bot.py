@@ -88,6 +88,18 @@ def help(update, context):
     )
 
 
+def reboot(update, context):
+    """Reboot the system"""
+    update.message.reply_text('🔃 I reboot the system... 🐈')
+    os.system("sudo reboot")
+
+
+def shutdown(update, context):
+    """Shutdown the system"""
+    update.message.reply_text('🔌 I shutdown the system... 😿')
+    os.system("sudo halt")
+
+
 def feed(update, context):
     """Roll out some paper of the printer when /feed is issued."""
     play_sound(f"{HOME_PATH}/Sound/feed.wav")
@@ -516,6 +528,8 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("feed", feed))
+    dp.add_handler(CommandHandler("reboot", reboot))
+    dp.add_handler(CommandHandler("shutdown", shutdown))
     dp.add_handler(CommandHandler("weather", weather))
     dp.add_handler(CommandHandler("meteo", meteo))
     dp.add_handler(CommandHandler("job", job))
