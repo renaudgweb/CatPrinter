@@ -5,6 +5,10 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 
 
 ## Install script:
+
+### Before start:
+**You need API keys from : Telegram Bot, OpenWeather and OpenAI**
+
 > `sudo chmod +x install.sh && sudo ./install.sh`
 
 Choose the Default install : [D] for normal installation
@@ -29,15 +33,6 @@ For example, in the following link:
 
 The channel ID is: *ybz3dgu*
 
-
-**You need API keys from : Telegram Bot, OpenWeather and OpenAI**
-
-
-Update the configuration files with your API keys in :
-
-> app > config > config.ini
-
-> app > config > config.php
 ---
 Be sure to replace the fonts with your own in the code, the fonts must be in the root folder. Like "Lucida_Console_Regular.ttf".
 

@@ -43,13 +43,22 @@ default_install() {
     config_file_ini="$current_path/app/config/config.ini"
     config_file_sh="$current_path/app/config/config.sh"
 
+    # Demander les informations à l'utilisateur
+    read -p "Telegram Bot TOKEN: " telegram_bot_token
+    read -p "OpenAI API key: " openai_api_key
+    read -p "Nextcloud Talk ID Channel: " nextcloud_talk_channel_id
+    read -p "OpenWeather API key: " openweather_api_key
+    read -p "Indeed job title: " indeed_job_name
+    read -p "Indeed city name: " indeed_city_name
+
+    # Contenu du fichier de configuration INI
     home_path="[Paths]\nHOME_PATH = $current_path"
-    telegram_bot_token="[Telegram_api]\nTELEGRAM_BOT_TOKEN = TOKEN-HERE"
-    openai_api_key="[OpenAI_api]\nOPENAI_API_KEY = APIKEY-HERE"
-    nextcloud_talk_channel_id="[Nextcloud_Talk_api]\nNEXTCLOUD_TALK_CHANNEL_ID = CHANNEL-ID-HERE"
-    openweather_api_key="[Openweather_api]\nOPENWEATHER_API_KEY = APIKEY-HERE"
-    indeed_job_name="[Indeed_job_name]\nINDEED_JOB_NAME = JOB-HERE"
-    indeed_city_name="[Indeed_city_name]\nINDEED_CITY_NAME = CITY-HERE"
+    telegram_bot_token="[Telegram_api]\nTELEGRAM_BOT_TOKEN = $telegram_bot_token"
+    openai_api_key="[OpenAI_api]\nOPENAI_API_KEY = $openai_api_key"
+    nextcloud_talk_channel_id="[Nextcloud_Talk_api]\nNEXTCLOUD_TALK_CHANNEL_ID = $nextcloud_talk_channel_id"
+    openweather_api_key="[Openweather_api]\nOPENWEATHER_API_KEY = $openweather_api_key"
+    indeed_job_name="[Indeed_job_name]\nINDEED_JOB_NAME = $indeed_job_name"
+    indeed_city_name="[Indeed_city_name]\nINDEED_CITY_NAME = $indeed_city_name"
 
     echo -e "# Config file\n\n$home_path" \
     "\n\n$telegram_bot_token\n\n$openai_api_key" \
