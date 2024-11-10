@@ -53,9 +53,14 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 ---
 You can use in Telegram app the following commands:
 
-> `\feed (to roll out paper)`
-> `\reboot (to reboot the system)`
-> `\shutdown (to shutdown the system)`
+> `\feed
+(to roll out paper)`
+
+> `\reboot
+(to reboot the system)`
+
+> `\shutdown
+(to shutdown the system)`
 ---
 ### Credits
 [amber-sixel gb01print](https://github.com/amber-sixel/gb01print)
