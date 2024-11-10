@@ -155,11 +155,11 @@ echo '          </code>
 
 ?>"
 
-    mkdir /var/www/html/cat/
-    echo "$php_web_log" > "/var/www/html/cat/index.php"
+    mkdir /var/www/html/catlog/
+    echo "$php_web_log" > "/var/www/html/catlog/index.php"
     printf "PHP file generated successfully ✔️\n"
     ip_priv=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}')
-    printf "\nYour logs can be readable at : $ip_priv/cat/ \n\n"
+    printf "\nYour logs can be readable at : $ip_priv/catlog/ \n\n"
 
 }
 

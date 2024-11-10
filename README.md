@@ -14,7 +14,7 @@ Driver, Telegram bot &amp; apps for the thermal "cat printer"
 Choose the Default install : [D] for normal installation
 
 After, you can choose the Web install : [W] for the PHP web log file
-(installed in /var/www/html/cat/index.php)
+(installed in /var/www/html/catlog/index.php)
 
 (Start install or [S] is for my personal use case)
 
