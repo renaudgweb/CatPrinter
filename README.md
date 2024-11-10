@@ -51,6 +51,12 @@ Be sure to replace the fonts with your own in the code, the fonts must be in the
 ## Feed paper:
 > `curl --location --request POST --form 'feed="100"' 'localhost:5000'`
 ---
+You can use the following commands:
+
+\feed (to roll out paper)
+\reboot (to reboot the system)
+\shutdown (to shutdown the system)
+---
 ### Credits
 [amber-sixel gb01print](https://github.com/amber-sixel/gb01print)
 
