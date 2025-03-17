@@ -2,7 +2,6 @@
 import logging
 import os
 from datetime import datetime
-from configparser import ConfigParser
 import requests
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import qrcode
