@@ -1,4 +1,6 @@
-![image text](catprinter.jpg "Thermal Cat printer")
+<p align="center">
+  <img src="catprinter.jpg" alt="Thermal Cat printer" width="200"/>
+</p>
 
 # CatPrinter
 Driver, Telegram bot &amp; apps for the thermal "cat printer"
