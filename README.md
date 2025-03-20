@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="catprinter.jpg" alt="Thermal Cat printer" width="200"/>
+  <img src="catprinter.jpg" alt="Thermal Cat printer" width="400"/>
 </p>
 
 # CatPrinter
