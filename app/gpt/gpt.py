@@ -14,7 +14,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 def generate_response(input_text):
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "I'm a kitty helpful assistant."},
             {"role": "user", "content": input_text}
