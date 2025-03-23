@@ -39,15 +39,18 @@ default_install() {
     sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 alsa-utils sed curl weather-util
     printf "APT packages are installed successfully ✔️\n"
 
-
     config_file_ini="$current_path/app/config/config.ini"
+    config_file_php="$current_path/app/config/config.php"
     config_file_sh="$current_path/app/config/config.sh"
 
     # Demander les informations à l'utilisateur
     read -p "Telegram Bot TOKEN: " telegram_bot_token
-    read -p "OpenAI API key: " openai_api_key
+    read -p "OpenAI API KEY: " openai_api_key
+    read -p "Nextcloud SERVER URL: " nextcloud_url
+    read -p "Nextcloud BOT NAME: " nextcloud_bot_name
+    read -p "Nextcloud PASSWORD: " nextcloud_password
     read -p "Nextcloud Talk ID Channel: " nextcloud_talk_channel_id
-    read -p "OpenWeather API key: " openweather_api_key
+    read -p "OpenWeather API KEY: " openweather_api_key
     read -p "Indeed job title: " indeed_job_name
     read -p "Indeed city name: " indeed_city_name
 
@@ -65,6 +68,16 @@ default_install() {
     "\n\n$nextcloud_talk_channel_id\n\n$openweather_api_key" \
     "\n\n$indeed_job_name\n$indeed_city_name" > "$config_file_ini"
 
+        # Contenu du fichier de configuration PHP
+        php_config="<?php
+
+\$SERVER = \"$nextcloud_url\";
+\$USER = \"$nextcloud_bot_name\";
+\$PASS = \"$nextcloud_password\";
+
+?>"
+    echo -e "$php_config" > "$config_file_php"
+
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
     printf "Paths are defined successfully ✔️\n"
 
@@ -72,7 +85,6 @@ default_install() {
     # et appliquer chmod +x à chacun d'eux
     find "$current_path" -type f -name "*.sh" -exec chmod +x {} \;
     printf "Permissions for .sh files have been applied successfully ✔️\n"
-
 
     # Obtenir l'utilisateur courrant
     current_user=$(echo $current_path | cut -d/ -f3)
