@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import logging
 import os
+import subprocess
 from datetime import datetime
 import requests
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
@@ -23,8 +24,12 @@ logger = logging.getLogger(__name__)
 
 
 def play_sound(sound_path):
-    """Play sound using aplay."""
-    os.system(f"sudo aplay -D hw:0,0 -c 2 -q {sound_path}")
+    """Play sound using aplay asynchronously."""
+    subprocess.Popen(
+        ["aplay", "-D", "hw:0,0", "-c", "2", "-q", sound_path], 
+        stdout=subprocess.DEVNULL, 
+        stderr=subprocess.DEVNULL
+    )
 
 
 def make_api_request(url):
