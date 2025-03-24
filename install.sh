@@ -109,6 +109,19 @@ default_install() {
       rm crontab_temp
       exit 1
     fi
+
+    while true
+    do
+        printf "Default install is done ✔️\nNow, make your choice: [R]eboot, [S]tart, [W]eb or [Q]uit : "
+        read -r REPLY
+        case $REPLY in
+            [Rr]* ) sudo reboot; break;;
+            [Ss]* ) start_install; break;;
+            [Ww]* ) web_install; break;;
+            [Qq]* ) printf "Bye 💨\n"; exit;;
+            * ) printf "⛔️Enter one of these letters: R, S, W or Q\n";;
+        esac
+    done
 }
 
 start_install() {
@@ -126,6 +139,19 @@ start_install() {
         rm crontab_temp
         exit 1
     fi
+
+    while true
+    do
+        printf "Start install is done ✔️\nNow, make your choice: [R]eboot, [D]efault, [W]eb or [Q]uit : "
+        read -r REPLY
+        case $REPLY in
+            [Rr]* ) sudo reboot; break;;
+            [Dd]* ) default_install; break;;
+            [Ww]* ) web_install; break;;
+            [Qq]* ) printf "Bye 💨\n"; exit;;
+            * ) printf "⛔️Enter one of these letters: R, D, W or Q\n";;
+        esac
+    done
 }
 
 web_install() {
@@ -173,6 +199,18 @@ echo '          </code>
     ip_priv=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}')
     printf "\nYour logs can be readable at : $ip_priv/catlog/ \n\n"
 
+    while true
+    do
+        printf "Web install is done ✔️\nNow, make your choice: [R]eboot, [D]efault, [S]tart or [Q]uit : "
+        read -r REPLY
+        case $REPLY in
+            [Rr]* ) sudo reboot; break;;
+            [Dd]* ) default_install; break;;
+            [Ss]* ) start_install; break;;
+            [Qq]* ) printf "Bye 💨\n"; exit;;
+            * ) printf "⛔️Enter one of these letters: R, D, S or Q\n";;
+        esac
+    done
 }
 
 while true
