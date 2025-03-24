@@ -32,12 +32,12 @@ EOF
 current_path=$(pwd)
 
 default_install() {
-    printf "Default Install...\n"
+    echo "Default Install..."
     pip install -r requirements.txt
-    printf "Pip packages are installed successfully ✔️\n"
+    echo "Pip packages are installed successfully ✔️\n"
 
     sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 alsa-utils sed curl weather-util
-    printf "APT packages are installed successfully ✔️\n"
+    echo "APT packages are installed successfully ✔️\n"
 
     config_file_ini="$current_path/app/config/config.ini"
     config_file_php="$current_path/app/config/config.php"
@@ -79,12 +79,12 @@ default_install() {
     echo -e "$php_config" > "$config_file_php"
 
     echo -e "HOME_PATH=\"$current_path\"\nexport HOME_PATH" > "$config_file_sh"
-    printf "Paths are defined successfully ✔️\n"
+    echo "Paths are defined successfully ✔️\n"
 
     # Utilisez la commande find pour rechercher tous les fichiers .sh
     # et appliquer chmod +x à chacun d'eux
     find "$current_path" -type f -name "*.sh" -exec chmod +x {} \;
-    printf "Permissions for .sh files have been applied successfully ✔️\n"
+    echo "Permissions for .sh files have been applied successfully ✔️\n"
 
     # Obtenir l'utilisateur courrant
     current_user=$(echo $current_path | cut -d/ -f3)
@@ -103,29 +103,29 @@ default_install() {
     # Installe la nouvelle crontab pour l'utilisateur actuel
     if sudo -u $current_user crontab crontab_temp; then
       rm crontab_temp
-      printf "Cron is installed successfully ✔️\n"
+      echo "Cron is installed successfully ✔️\n"
     else
-      echo "Error during cron installation ❌\n"
+      echo "Error during cron installation ❌"
       rm crontab_temp
       exit 1
     fi
 
     while true
     do
-        printf "Default install is done ✔️\nNow, make your choice: [R]eboot, [S]tart, [W]eb or [Q]uit : "
+        echo "Default install is done ✔️\nNow, make your choice: [R]eboot🔄, [S]tart▶️, [W]eb🌐 or [Q]uit🚪 : "
         read -r REPLY
         case $REPLY in
             [Rr]* ) sudo reboot; break;;
             [Ss]* ) start_install; break;;
             [Ww]* ) web_install; break;;
-            [Qq]* ) printf "Bye 💨\n"; exit;;
-            * ) printf "⛔️Enter one of these letters: R, S, W or Q\n";;
+            [Qq]* ) echo "Bye 👋"; exit;;
+            * ) echo "⛔️Enter one of these letters: R, S, W or Q";;
         esac
     done
 }
 
 start_install() {
-    printf "Start Install...\n"
+    echo "Start Install..."
 
     sudo crontab -l > crontab_temp 2>/dev/null || touch crontab_temp
 
@@ -133,32 +133,32 @@ start_install() {
 
     if sudo crontab crontab_temp; then
         rm crontab_temp
-        printf "Cron with sudo is installed successfully ✔️\n"
+        echo "Cron with sudo is installed successfully ✔️\n"
     else
-        echo "Error during cron installation ❌\n"
+        echo "Error during cron installation ❌"
         rm crontab_temp
         exit 1
     fi
 
     while true
     do
-        printf "Start install is done ✔️\nNow, make your choice: [R]eboot, [D]efault, [W]eb or [Q]uit : "
+        echo "Start install is done ✔️\nNow, make your choice: [R]eboot🔄, [D]efault⚙️, [W]eb🌐 or [Q]uit🚪 : "
         read -r REPLY
         case $REPLY in
             [Rr]* ) sudo reboot; break;;
             [Dd]* ) default_install; break;;
             [Ww]* ) web_install; break;;
-            [Qq]* ) printf "Bye 💨\n"; exit;;
-            * ) printf "⛔️Enter one of these letters: R, D, W or Q\n";;
+            [Qq]* ) echo "Bye 👋"; exit;;
+            * ) echo "⛔️Enter one of these letters: R, D, W or Q";;
         esac
     done
 }
 
 web_install() {
-    printf "Web Install...\n"
+    echo "Web Install..."
 
     sudo apt update && sudo apt install php apache2
-    printf "Apache2 and PHP installed successfully ✔️\n"
+    echo "Apache2 and PHP installed successfully ✔️\n"
 
     php_web_log="<?php
 
@@ -195,33 +195,33 @@ echo '          </code>
 
     mkdir /var/www/html/catlog/
     echo "$php_web_log" > "/var/www/html/catlog/index.php"
-    printf "PHP file generated successfully ✔️\n"
+    echo "PHP file generated successfully ✔️\n"
     ip_priv=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}')
     printf "\nYour logs can be readable at : $ip_priv/catlog/ \n\n"
 
     while true
     do
-        printf "Web install is done ✔️\nNow, make your choice: [R]eboot, [D]efault, [S]tart or [Q]uit : "
+        echo "Web install is done ✔️\nNow, make your choice: [R]eboot🔄, [D]efault⚙️, [S]tart▶️ or [Q]uit🚪 : "
         read -r REPLY
         case $REPLY in
             [Rr]* ) sudo reboot; break;;
             [Dd]* ) default_install; break;;
             [Ss]* ) start_install; break;;
-            [Qq]* ) printf "Bye 💨\n"; exit;;
-            * ) printf "⛔️Enter one of these letters: R, D, S or Q\n";;
+            [Qq]* ) echo "Bye 👋"; exit;;
+            * ) echo "⛔️Enter one of these letters: R, D, S or Q";;
         esac
     done
 }
 
 while true
 do
-    printf "Choose your install : [D]efault, [S]tart, [W]eb or [Q]uit : "
+    echo "Choose your install : [D]efault⚙️, [S]tart▶️, [W]eb🌐 or [Q]uit🚪 : "
     read -r REPLY
     case $REPLY in
         [Dd]* ) default_install; break;;
         [Ss]* ) start_install; break;;
         [Ww]* ) web_install; break;;
-        [Qq]* ) printf "Bye 💨\n"; exit;;
-        * ) printf "⛔️Enter one of these letters: D, S, W or Q\n";;
+        [Qq]* ) echo "Bye 👋"; exit;;
+        * ) echo "⛔️Enter one of these letters: D, S, W or Q";;
     esac
 done
