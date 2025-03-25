@@ -10,7 +10,7 @@
 # --form 'size="48"' \  #optional
 # --form 'font="comic.ttf"'  #optional
 # --form 'feed="100"'  #optional
-# --form 'energy="1200"'  #optional
+# --form 'energy="12000"'  #optional
 import asyncio
 import platform
 import time
@@ -398,7 +398,7 @@ def http_server_upload():
         if 'energy' in request.form:
             energy =  int(request.form['energy'])
         else:
-            energy = 17000
+            energy = 17500
         if 'feed' in request.form:
             feed = int(request.form['feed']) # feed amount
         else:
