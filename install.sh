@@ -33,11 +33,12 @@ current_path=$(pwd)
 
 default_install() {
     echo "Default Install..."
-    pip install -r requirements.txt
-    echo "Pip packages are installed successfully ✔️\n"
 
     sudo apt update && sudo apt install -y wkhtmltopdf libopenjp2-7 python3 alsa-utils sed curl weather-util
     echo "APT packages are installed successfully ✔️\n"
+
+    pip install -r requirements.txt
+    echo "Pip packages are installed successfully ✔️\n"
 
     config_file_ini="$current_path/app/config/config.ini"
     config_file_php="$current_path/app/config/config.php"
